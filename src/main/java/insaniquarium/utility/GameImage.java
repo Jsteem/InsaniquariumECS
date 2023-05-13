@@ -18,33 +18,30 @@ public class GameImage {
     private ImageInfo imageInfo;
 
 
-
     public GameImage(ImageInfo imageInfo) {
         this.imageInfo = imageInfo;
         String path = this.path + imageInfo.fileName;
         String pathMask = this.path + "_" + imageInfo.fileName;
 
-        if(imageInfo.cellWidth < 0 && imageInfo.cellHeight < 0){
-            File imageFile = new File(Main.class.getResource(path).getFile());
-            try{
-                this.image = SwingFXUtils.toFXImage(ImageIO.read(imageFile), null);
 
-            }
-           catch (Exception e){
-
-           }
+        InputStream imageFile = Main.class.getResourceAsStream(path);
+        InputStream maskFile = Main.class.getResourceAsStream(pathMask);
+        if (maskFile == null) {
+            //try other path
+            String[] tokens = imageInfo.fileName.split("\\.(?=[^\\.]+$)");
+            pathMask = this.path + tokens[0] + "_." + tokens[1];
+            maskFile = Main.class.getResourceAsStream(pathMask);
         }
-        else{
 
-            InputStream imageFile = Main.class.getResourceAsStream(path);
-            InputStream maskFile = Main.class.getResourceAsStream(pathMask);
-            if (maskFile == null) {
-                //try other path
-                String[] tokens = imageInfo.fileName.split("\\.(?=[^\\.]+$)");
-                pathMask = this.path + tokens[0] + "_." + tokens[1];
-                maskFile = Main.class.getResourceAsStream(pathMask);
+        if (maskFile == null) {
+            File file = new File(Main.class.getResource(path).getFile());
+            try {
+                this.image = SwingFXUtils.toFXImage(ImageIO.read(file), null);
+
+            } catch (Exception e) {
+
             }
-
+        } else {
             try {
                 BufferedImage imageOriginal = ImageIO.read(imageFile);
                 BufferedImage mask = ImageIO.read(maskFile);
@@ -66,11 +63,12 @@ public class GameImage {
 
 
     }
-    public javafx.scene.image.Image getImage(){
+
+    public javafx.scene.image.Image getImage() {
         return this.image;
     }
 
-    public ImageInfo getImageInfo(){
+    public ImageInfo getImageInfo() {
         return this.imageInfo;
     }
 }

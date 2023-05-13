@@ -16,12 +16,14 @@ public class Sprite extends DrawRequest {
 
     boolean reversed;
 
+    double scale;
+
 
     private final GameImage image;
 
     private final ImageInfo imageInfo;
 
-    public Sprite(ImageInfo.IMAGE_NAME name, int x, int y, int row, int column, boolean reversed) {
+    public Sprite(ImageInfo.IMAGE_NAME name, int x, int y, int row, int column, boolean reversed, double scale) {
         this.x = x;
         this.y = y;
         this.row = row;
@@ -29,31 +31,34 @@ public class Sprite extends DrawRequest {
         this.image = ResourceManager.getInstance().getImage(name);
         this.imageInfo = this.image.getImageInfo();
         this.reversed = reversed;
+        this.scale = scale;
     }
 
     @Override
     public void draw(GraphicsContext graphics) {
-        int dx1 = x - imageInfo.cellWidth / 2;
-        int dy1 = y - imageInfo.cellHeight / 2;
-        int dx2 = imageInfo.cellWidth;
-        int dy2 = imageInfo.cellHeight;
-        int sx1 = column * imageInfo.cellWidth;
-        int sy1 = row * imageInfo.cellHeight;
-        int sx2 = imageInfo.cellWidth;
-        int sy2 = imageInfo.cellHeight;
+        int sx = column * imageInfo.cellWidth;
+        int sy = row * imageInfo.cellHeight;
+        int sw = imageInfo.cellWidth;
+        int sh = imageInfo.cellHeight;
+
+        int dx = x - imageInfo.cellWidth / 2;
+        int dy = y - imageInfo.cellHeight / 2;
+        int dw = (int) (imageInfo.cellWidth * scale);
+        int dh = (int) (imageInfo.cellHeight * scale);
+
 
         if (reversed) {
             graphics.scale(-1, 1);
-            dx1 = -x - imageInfo.cellWidth / 2;
+            dx = -x - imageInfo.cellWidth / 2;
 
-            graphics.drawImage(image.getImage(), sx1, sy1, sx2, sy2,
-                    dx1, dy1, dx2, dy2);
+            graphics.drawImage(image.getImage(), sx, sy, sw, sh,
+                    dx, dy, dw, dh);
 
             graphics.scale(-1, 1);
 
         } else {
-            graphics.drawImage(image.getImage(), sx1, sy1, sx2, sy2,
-                    dx1, dy1, dx2, dy2
+            graphics.drawImage(image.getImage(), sx, sy, sw, sh,
+                    dx, dy, dw, dh
             );
 
         }

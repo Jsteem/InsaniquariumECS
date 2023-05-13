@@ -69,5 +69,8 @@ public class ResourceManager {
         nameToInfo.put(ImageInfo.IMAGE_NAME.OPTIONS_BUTTON_UNPRESSED, new ImageInfo("OPTIONSBUTTON.gif", 0,0,-1,-1));
         nameToInfo.put(ImageInfo.IMAGE_NAME.OPTIONS_BUTTON_PRESSED, new ImageInfo("OPTIONSBUTTONd.gif", 0,0,-1,-1));
 
+
+        nameToInfo.put(ImageInfo.IMAGE_NAME.WEAPONS, new ImageInfo("LazerGunz.gif", 46,39,1,10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.EGG, new ImageInfo("EggPieces.gif", 46,39,1,3));
     }
 }

@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static insaniquarium.game.menu.MenuOverlay.upgradeDisplayEntity;
+
 public class GameData {
     private static int tierFood = 0;
-    private int maxFood = 100;
+    private static int maxFood = 1;
     private int numFood = 0;
     private int foodPrice = 5;
     private int laserUpgrade = 0;
@@ -34,6 +36,10 @@ public class GameData {
 
     }
 
+    public static int getMaxAmountOfFood() {
+        return maxFood;
+    }
+
     public void increaseMoney(int money){
         this.totalAmountOfMoney += money;
 
@@ -50,13 +56,15 @@ public class GameData {
                 }
                 case 1 -> {
                     if(this.tierFood < 2){
+                        upgradeDisplayEntity(1);
                         this.tierFood++;
                         buy(buyPrice);
                     }
                 }
                 case 2 -> {
-                    if(this.maxFood < 10) {
+                    if(this.maxFood < 9) {
                         this.maxFood++;
+                        upgradeDisplayEntity(2);
                         buy(buyPrice);
                     }
                 }
@@ -75,14 +83,19 @@ public class GameData {
                     }
                 }
                 case 5 -> {
-                    this.laserUpgrade++;
-                    buy(buyPrice);
+                    if(this.laserUpgrade < 9){
+                        this.laserUpgrade++;
+                        buy(buyPrice);
+                        upgradeDisplayEntity(5);
+                    }
+
                 }
 
                 case 6 -> {
                     if(this.eggPiece < 2) {
                         this.eggPiece++;
                         buy(buyPrice);
+                        upgradeDisplayEntity(6);
                     }
                     else{
                         System.out.println("Level Completed!");
@@ -122,5 +135,13 @@ public class GameData {
     }
     public static int getTierFood(){
         return tierFood;
+    }
+
+    public FishTypeComponent.FISH_TYPE[] getFishData(){
+        return this.fishData;
+    }
+
+    public int[] getPrices() {
+        return this.priceData;
     }
 }

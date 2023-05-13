@@ -18,7 +18,7 @@ public class FoodFactory extends Factory{
         HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.FOOD, AnimationComponent.AnimationType.IDLE, level, 0.07, true));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.FOOD, AnimationComponent.AnimationType.IDLE, level, 0.07, true, 1));
 
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         food.addComponent(animationComponent);
@@ -34,6 +34,15 @@ public class FoodFactory extends Factory{
         EntityManager.getInstance().addEntity(food);
 
 
+    }
+
+    @Override
+    public Entity createDisplayEntity(int x, int y) {
+        Entity food = new Entity();
+
+        food.addComponent(new RenderComponent(ImageInfo.IMAGE_NAME.FOOD, x, y, 1, 0, 1));
+
+        return food;
     }
 
 

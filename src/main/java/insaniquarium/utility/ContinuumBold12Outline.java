@@ -6,7 +6,7 @@ import insaniquarium.managers.drawrequest.Font;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContinuumBold12Outline {
+public class ContinuumBold12Outline extends GameFont{
     private int[][] recList =
             {{   0,  0, 16, 22}, {  18,  0, 15, 22}, {  35,  0, 14, 22}, {  51,  0, 15, 22},
                     {  68,  0, 14, 22}, {  84,  0, 14, 22}, { 100,  0, 15, 22}, { 117,  0, 15, 22},
@@ -53,9 +53,8 @@ public class ContinuumBold12Outline {
             4,   3,   6,   3,   9,   3,   9,   9,   8
     };
 
-    private Map<Character, int[]> characterToData;
     public ContinuumBold12Outline(){
-        characterToData = new HashMap<Character, int[]>();
+        characterToData = new HashMap<>();
         for(int i = 0; i < charList.length; i++){
             char c = charList[i];
             int[] boundingBox = recList[i];
@@ -66,87 +65,9 @@ public class ContinuumBold12Outline {
             }
             data[4] = width;
             characterToData.put(c, data);
-            //System.out.println("Character: " + c + " Data: " + Arrays.toString(data) + "pos: " + (i+1));
+
         }
 
     }
 
-    public void drawString(String str, double x, double y, float percentage){
-        char[] charArray = str.toCharArray();
-        double dx = x;
-        for (int i = 0; i < charArray.length; i++) {
-
-            char c = charArray[i];
-            if(characterToData.containsKey(c)){
-                int[] data = characterToData.get(c);
-                //System.out.println("Character: " + c + " Data: " + Arrays.toString(data));
-                RenderManager.getInstance().submitDrawRequest(
-                        new Font(ImageInfo.IMAGE_NAME.CONTBOLD12, data[0], data[1], data[2], data[3], (int) dx, (int) y, data[2], data[3], percentage));
-
-                dx += data[4] * percentage;
-            }
-            else{
-                dx += 4;
-            }
-        }
-    }
-    public void drawStringCenteredX(String str, double x, double y, float percentage){
-        int width = 0;
-        char[] charArray = str.toCharArray();
-        for (int i = 0; i < charArray.length; i++) {
-            char c = charArray[i];
-            if(characterToData.containsKey(c)) {
-                width += characterToData.get(c)[4];
-            }
-            else{
-                width += 4;
-            }
-        }
-
-
-        double dx = x - width/2;
-        for (int i = 0; i < charArray.length; i++) {
-            char c = charArray[i];
-            if(characterToData.containsKey(c)){
-                int[] data = characterToData.get(c);
-                //System.out.println("Character: " + c + " Data: " + Arrays.toString(data));
-                RenderManager.getInstance().submitDrawRequest(
-                        new Font(ImageInfo.IMAGE_NAME.CONTBOLD12, data[0], data[1], data[2], data[3], (int) dx, (int) y, data[2], data[3], percentage));
-
-                dx += data[4] * percentage;
-            }
-            else{
-                dx += 4;
-            }
-        }
-    }
-
-    public void drawStringCenteredLeftX(String str, double x, double y, float percentage) {
-        int width = 0;
-        char[] charArray = str.toCharArray();
-        for (int i = 0; i < charArray.length; i++) {
-            char c = charArray[i];
-            if(characterToData.containsKey(c)) {
-                width += characterToData.get(c)[4];
-            }
-            else{
-                width += 4;
-            }
-        }
-        double dx = x - width;
-        for (int i = 0; i < charArray.length; i++) {
-            char c = charArray[i];
-            if(characterToData.containsKey(c)){
-                int[] data = characterToData.get(c);
-                //System.out.println("Character: " + c + " Data: " + Arrays.toString(data));
-                RenderManager.getInstance().submitDrawRequest(
-                        new Font(ImageInfo.IMAGE_NAME.CONTBOLD12, data[0], data[1], data[2], data[3], (int) dx, (int) y, data[2], data[3], percentage));
-
-                dx += data[4] * percentage;
-            }
-            else{
-                dx += 4;
-            }
-        }
-    }
 }

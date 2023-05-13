@@ -24,31 +24,31 @@ public class GuppyFactory extends Factory{
         HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, level, 0.07, true));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, level, 0.07, true, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.TURN,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN, AnimationComponent.AnimationType.TURN, level, 0.07, false));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN, AnimationComponent.AnimationType.TURN, level, 0.07, false, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.EAT,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT, AnimationComponent.AnimationType.EAT, level, 0.07, false));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT, AnimationComponent.AnimationType.EAT, level, 0.07, false, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.DIE,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_DIE, AnimationComponent.AnimationType.DIE, level, 0.07, false));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_DIE, AnimationComponent.AnimationType.DIE, level, 0.07, false, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.HUNGRY_IDLE,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_SWIM, AnimationComponent.AnimationType.HUNGRY_IDLE, level, 0.07, true));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_SWIM, AnimationComponent.AnimationType.HUNGRY_IDLE, level, 0.07, true, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.HUNGRY_TURN,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_TURN, AnimationComponent.AnimationType.HUNGRY_TURN, level, 0.07, false));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_TURN, AnimationComponent.AnimationType.HUNGRY_TURN, level, 0.07, false, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.HUNGRY_EAT,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT, AnimationComponent.AnimationType.HUNGRY_EAT, level, 0.07, false));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT, AnimationComponent.AnimationType.HUNGRY_EAT, level, 0.07, false, 1));
 
 
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
@@ -66,6 +66,22 @@ public class GuppyFactory extends Factory{
 
         EntityManager.getInstance().addEntity(guppy);
     }
+
+    @Override
+    public Entity createDisplayEntity(int x, int y) {
+        Entity guppy = new Entity();
+
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        animationComponents.put(
+                AnimationComponent.AnimationType.IDLE,
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
+
+        guppy.addComponent(new AnimationComponent(animationComponents));
+        guppy.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        return guppy;
+    }
+
+
 }
 
 

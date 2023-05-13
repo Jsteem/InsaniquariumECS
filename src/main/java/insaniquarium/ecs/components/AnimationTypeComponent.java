@@ -14,13 +14,16 @@ public class AnimationTypeComponent {
 
     public boolean loop;
 
+    public double scale;
 
-    public AnimationTypeComponent(ImageInfo.IMAGE_NAME spriteName, AnimationComponent.AnimationType type, int rowNr, double animationSpeed, boolean loop){
+
+    public AnimationTypeComponent(ImageInfo.IMAGE_NAME spriteName, AnimationComponent.AnimationType type, int rowNr, double animationSpeed, boolean loop, double scale){
         this.spriteName = spriteName;
         this.type = type;
         this.rowNr = rowNr;
         this.animationSpeed = animationSpeed;
         this.loop = loop;
+        this.scale = scale;
     }
 
 
