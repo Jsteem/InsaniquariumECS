@@ -1,5 +1,6 @@
 package insaniquarium.game;
 
+import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.SystemManager;
@@ -15,7 +16,6 @@ import java.awt.image.BufferStrategy;
 
 public class GameCanvas extends Canvas {
 
-    public static final int MENU_OFFSET_HEIGHT = 80;
     public static final int GROUND_OFFSET_HEIGHT = 40;
     public static final int SIDE_OFFSET = 20;
 

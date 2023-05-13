@@ -10,6 +10,8 @@ import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
 import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.game.GameCanvas;
+import insaniquarium.managers.ResourceManager;
+import insaniquarium.utility.ImageInfo;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -20,9 +22,10 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private GameCanvas canvas;
-    public static final int WIDTH = 650;
-    public static final int HEIGHT = 518;
-    public static final int MENU_OFFSET = 75;
+    public static final int WIDTH = 640;
+    public static final int MENU_OFFSET = 70;
+    public static final int HEIGHT = 480;
+
 
     public static final boolean DEBUG = true;
 
@@ -46,13 +49,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setResizable(false);
-        primaryStage.setWidth(WIDTH);
-        primaryStage.setHeight(HEIGHT);
-
 
         canvas = new GameCanvas();
         canvas.setWidth(WIDTH);
         canvas.setHeight(HEIGHT);
+
         StackPane root = new StackPane();
         root.setAlignment(Pos.TOP_LEFT);
         root.getChildren().add(canvas);
