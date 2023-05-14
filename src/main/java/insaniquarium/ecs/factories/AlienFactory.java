@@ -4,8 +4,8 @@ import insaniquarium.ecs.Entity;
 
 public class AlienFactory extends Factory{
     @Override
-    public void createEntity(int x, int y, int level) {
-
+    public Entity createEntity(int x, int y, int level) {
+        return null;
     }
 
     @Override

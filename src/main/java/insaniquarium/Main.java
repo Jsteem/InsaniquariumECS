@@ -2,10 +2,7 @@ package insaniquarium;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.components.BoundingCollisionComponent;
-import insaniquarium.ecs.components.HandleNoCollision;
-import insaniquarium.ecs.components.MovementComponent;
-import insaniquarium.ecs.components.TargetComponent;
+import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
 import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
@@ -17,7 +14,10 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import static insaniquarium.utility.ImageInfo.IMAGE_NAME.CONTBOLD12;
 
 
 public class Main extends Application {
@@ -115,11 +115,14 @@ public class Main extends Application {
             click.addComponent(movementComponent);
             click.addComponent(collisionComponent);
             EntityManager.getInstance().addEntity(click);*/
-
-
-
         });
 
+        Entity fpsDisplay = new Entity();
+        TextComponent textComponent = new TextComponent(
+                CONTBOLD12, TextComponent.POSITION.LEFT, "",
+                630,460, 0.8f, Color.ORANGE);
+        fpsDisplay.addComponent(textComponent);
+        EntityManager.getInstance().addEntity(fpsDisplay);
 
         new AnimationTimer() {
             @Override
@@ -157,6 +160,7 @@ public class Main extends Application {
                     frameCount = 0;
                     elapsedTime = 0.0;
                 }
+                fpsDisplay.getComponent(TextComponent.class).buildText("FPS: "+String.format("%.1f", fps));
             }
         }.start();
     }

@@ -19,14 +19,24 @@ public class GameCanvas extends Canvas {
     public static final int GROUND_OFFSET_HEIGHT = 40;
     public static final int SIDE_OFFSET = 20;
 
-    MenuOverlay menuOverlay;
+    static MenuOverlay menuOverlay;
+
+    PlayerData playerData = new PlayerData("testPlayer");
+    GameData gameData;
+
+    private void init(){
+
+
+        gameData = new GameData(this, playerData);
+
+    }
+    public void onFinishLevel() {
+        playerData.increaseLevel();
+        EntityManager.getInstance().reset();
+        init();
+    }
 
     public GameCanvas() {
-
-        //initialize all the data
-        PlayerData playerData = new PlayerData("testPlayer");
-        LevelData levelData = new LevelData(playerData);
-        GameData gameData = new GameData(levelData);
 
         //create the systems
         SystemManager.getInstance().registerSystem(new AnimationSystem());
@@ -35,19 +45,10 @@ public class GameCanvas extends Canvas {
         SystemManager.getInstance().registerSystem(new MovementSystem());
         SystemManager.getInstance().registerRenderSystem(new RenderSystem());
 
-        //add the background
-        Entity background = new Entity();
-        RenderComponent backGroundComponent = new RenderComponent(levelData.getBackGroundName(), 0, 0, -1, -1);
-        background.addComponent(backGroundComponent);
-        EntityManager.getInstance().addEntity(background);
-
-        //add a guppy
-        GuppyFactory guppyFactory = new GuppyFactory();
-        guppyFactory.createEntity(100,100, 0);
-
-        menuOverlay = new MenuOverlay(gameData);
+        init();
 
     }
+
 
     public void update(double timeStep) {
 

@@ -2,12 +2,16 @@ package insaniquarium.game;
 
 import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
+import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LevelData {
     private int tankNumber;
     private int levelNumber;
-    private FishTypeComponent.FISH_TYPE[] variableSlots;
+    private Enum[] variableSlots;
     //variable
     private int[] prices;
 
@@ -16,15 +20,16 @@ public class LevelData {
     private PlayerData playerData;
 
     ImageInfo.IMAGE_NAME[] backGroundImageNames = {
+            ImageInfo.IMAGE_NAME.BACKGROUND_TANK0,
             ImageInfo.IMAGE_NAME.BACKGROUND_TANK1,
-            ImageInfo.IMAGE_NAME.BACKGROUND_TANK2,
             ImageInfo.IMAGE_NAME.BACKGROUND_TANK3,
-            ImageInfo.IMAGE_NAME.BACKGROUND_TANK4
+            ImageInfo.IMAGE_NAME.BACKGROUND_TANK4,
+            ImageInfo.IMAGE_NAME.BACKGROUND_TANK5,
     };
 
 
     //variableSlotsData - what type should be in slot1, slot4 and slot5
-    private static FishTypeComponent.FISH_TYPE[][] variableSlotsData = {
+    private static Enum[][] variableSlotsData = {
             //tank0
             {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, null, null},
             {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, null, null},
@@ -32,17 +37,17 @@ public class LevelData {
             {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.CARNIVORE, null},
             {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.CARNIVORE, null},
             //tank1
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_STAR, null},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_STAR, FishTypeComponent.FISH_TYPE.STARCATCHER},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_STAR, FishTypeComponent.FISH_TYPE.STARCATCHER},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_STAR, FishTypeComponent.FISH_TYPE.STARCATCHER},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_STAR, FishTypeComponent.FISH_TYPE.STARCATCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FoodTypeComponent.FOOD_TYPE.POTION, null},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FoodTypeComponent.FOOD_TYPE.POTION, FishTypeComponent.FISH_TYPE.STAR_CATCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FoodTypeComponent.FOOD_TYPE.POTION, FishTypeComponent.FISH_TYPE.STAR_CATCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FoodTypeComponent.FOOD_TYPE.POTION, FishTypeComponent.FISH_TYPE.STAR_CATCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FoodTypeComponent.FOOD_TYPE.POTION, FishTypeComponent.FISH_TYPE.STAR_CATCHER},
             //tank2
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPYCRUNSHER, null},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPYCRUNSHER, FishTypeComponent.FISH_TYPE.BEETLEMUNCHER},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPYCRUNSHER, FishTypeComponent.FISH_TYPE.BEETLEMUNCHER},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPYCRUNSHER, FishTypeComponent.FISH_TYPE.BEETLEMUNCHER},
-            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPYCRUNSHER, FishTypeComponent.FISH_TYPE.BEETLEMUNCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_CRUNCHER, null},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_CRUNCHER, FishTypeComponent.FISH_TYPE.BEETLE_MUNCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_CRUNCHER, FishTypeComponent.FISH_TYPE.BEETLE_MUNCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_CRUNCHER, FishTypeComponent.FISH_TYPE.BEETLE_MUNCHER},
+            {FishTypeComponent.FISH_TYPE.GUPPY_SMALL, FishTypeComponent.FISH_TYPE.GUPPY_CRUNCHER, FishTypeComponent.FISH_TYPE.BEETLE_MUNCHER},
             //tank3
             {FishTypeComponent.FISH_TYPE.BREEDER, FishTypeComponent.FISH_TYPE.CARNIVORE, null},
             {FishTypeComponent.FISH_TYPE.BREEDER, FishTypeComponent.FISH_TYPE.CARNIVORE, FishTypeComponent.FISH_TYPE.ULTRAVORE},
@@ -116,13 +121,13 @@ public class LevelData {
         this.playerData = playerData;
         this.tankNumber = playerData.getUnlockedTankNumber();
         this.levelNumber = playerData.getUnlockedLevelNumber();
-        this.variableSlots = variableSlotsData[tankNumber * 4 + levelNumber];
-        this.prices = pricesData[tankNumber * 4 + levelNumber];
-        this.alienData = aliensData[tankNumber * 4 + levelNumber];
+        this.variableSlots = variableSlotsData[(tankNumber * 5) + levelNumber];
+        this.prices = pricesData[(tankNumber * 5) + levelNumber];
+        this.alienData = aliensData[(tankNumber * 5) + levelNumber];
 
     }
 
-    public FishTypeComponent.FISH_TYPE[] getVariableSlots(){
+    public Enum[] getVariableSlots(){
         return this.variableSlots;
     }
 

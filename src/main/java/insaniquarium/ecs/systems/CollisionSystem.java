@@ -32,7 +32,11 @@ public class CollisionSystem extends System {
                 TargetComponent targetComponent = entity.getComponent(TargetComponent.class);
                 if (targetComponent != null) {
                     long mask = targetComponent.maskEntityTarget;
-                    objectTypeToKDTree.put(mask, new KDTree());
+                    if(mask > 0)
+                    {
+                        objectTypeToKDTree.put(mask, new KDTree());
+                    }
+
                 }
             }
 
@@ -105,7 +109,7 @@ public class CollisionSystem extends System {
                 if(targetComponent != null && (targetComponent.maskEntity & ClickTypeComponent.CLICK_TYPE.CLICK.value) > 0){
                     HandleNoCollision handleNoCollision = entity.getComponent(HandleNoCollision.class);
                     if(handleNoCollision != null && !collisionFound){
-                        handleNoCollision.handleNoCollision(movementComponent.x, movementComponent.y);
+                        handleNoCollision.handleNoCollision(entity, movementComponent.x, movementComponent.y);
                     }
                     entities.remove(entity);
                 }

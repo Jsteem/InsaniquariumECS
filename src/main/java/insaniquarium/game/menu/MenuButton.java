@@ -18,16 +18,14 @@ public class MenuButton {
 
     int radius = 26;
 
-    GameData gameData;
-
-    private static int totalIds;
-
     private int id;
 
-    public MenuButton(GameData gameData, int x, int y) {
-        id = totalIds++;
+    MenuOverlay menuOverlay;
+
+    public MenuButton(MenuOverlay menuOverlay, int x, int y, int id) {
         this.x = x + 29;
         this.y = y + 22;
+        this.id = id;
         slot = new Entity();
         RenderComponent renderComponent = new RenderComponent(SLOT_BUTTON_UNPRESSED, x, y, 57, 60);
         MovementComponent movementComponent = new MovementComponent(this.x, this.y, 0, 0, 0, 0);
@@ -36,7 +34,7 @@ public class MenuButton {
         slot.addComponent(collisionComponent);
         slot.addComponent(movementComponent);
         EntityManager.getInstance().addEntity(slot);
-        this.gameData = gameData;
+        this.menuOverlay = menuOverlay;
 
     }
 
@@ -46,7 +44,7 @@ public class MenuButton {
         if (pressed) {
             if (collided) {
                 slot.getComponent(RenderComponent.class).imageName = SLOT_BUTTON_PRESSED;
-                gameData.handleButtonPress(id);
+                menuOverlay.handleButtonPress(id);
 
             } else {
 

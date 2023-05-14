@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class FoodFactory extends Factory{
     @Override
-    public void createEntity(int x, int y, int level) {
+    public Entity createEntity(int x, int y, int level) {
 
         Entity food = new Entity();
 
@@ -32,8 +32,7 @@ public class FoodFactory extends Factory{
         food.addComponent(new TargetComponent(FoodTypeComponent.FOOD_TYPE.FOOD.value, 0));
 
         EntityManager.getInstance().addEntity(food);
-
-
+        return food;
     }
 
     @Override

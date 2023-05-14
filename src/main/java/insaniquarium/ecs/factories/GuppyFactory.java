@@ -18,7 +18,7 @@ public class GuppyFactory extends Factory{
     }
 
     @Override
-    public void createEntity(int x, int y, int level) {
+    public Entity createEntity(int x, int y, int level) {
         Entity guppy = new Entity();
 
         HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
@@ -65,6 +65,7 @@ public class GuppyFactory extends Factory{
         guppy.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
 
         EntityManager.getInstance().addEntity(guppy);
+        return guppy;
     }
 
     @Override

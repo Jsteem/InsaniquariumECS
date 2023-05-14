@@ -16,7 +16,7 @@ public class CarnivoreFactory extends Factory{
     }
 
     @Override
-    public void createEntity(int x, int y, int level) {
+    public Entity createEntity(int x, int y, int level) {
         Entity carnivore = new Entity();
         HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
         animationComponents.put(
@@ -61,6 +61,7 @@ public class CarnivoreFactory extends Factory{
         carnivore.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.CARNIVORE.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));
 
         EntityManager.getInstance().addEntity(carnivore);
+        return carnivore;
     }
 
     @Override

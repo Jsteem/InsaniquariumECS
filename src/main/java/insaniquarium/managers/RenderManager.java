@@ -1,5 +1,6 @@
 package insaniquarium.managers;
 
+import insaniquarium.Main;
 import insaniquarium.ecs.SystemManager;
 import insaniquarium.managers.drawrequest.DrawRequest;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,6 +25,7 @@ public class RenderManager {
     }
 
     public void draw(GraphicsContext graphics){
+        graphics.clearRect(0, 0, Main.WIDTH, Main.HEIGHT);
         SystemManager.getInstance().updateDrawSystem();
         //todo: sort the requests on priority
 
@@ -34,5 +36,6 @@ public class RenderManager {
         }
         drawRequests.clear();
     }
+
 
 }

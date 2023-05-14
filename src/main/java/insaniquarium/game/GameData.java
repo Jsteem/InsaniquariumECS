@@ -1,42 +1,57 @@
 package insaniquarium.game;
 
+import insaniquarium.ecs.Entity;
+import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.FactoryManager;
+import insaniquarium.ecs.components.RenderComponent;
 import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.ecs.factories.Factory;
+import insaniquarium.game.menu.MenuOverlay;
+import insaniquarium.utility.ImageInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static insaniquarium.game.menu.MenuOverlay.upgradeDisplayEntity;
+import static insaniquarium.game.GameCanvas.menuOverlay;
 
 public class GameData {
     private static int tierFood = 0;
-    private static int maxFood = 1;
+    private int maxFood = 1;
     private int numFood = 0;
     private int foodPrice = 5;
     private int laserUpgrade = 0;
     private int eggPiece = 0;
-    private int totalAmountOfMoney = 20000;
+    private int totalAmountOfMoney = 2000000;
     private int currentButtonUnlocked = 0;
-    private LevelData levelData;
-
-    FishTypeComponent.FISH_TYPE[] fishData;
+    Enum[] slotData;
     int[] priceData;
 
     long[] alienData;
 
-    public GameData(LevelData levelData){
-        this.levelData = levelData;
+    private LevelData levelData;
 
-        fishData = levelData.getVariableSlots();
-        alienData = levelData.getAlienData();
+    private GameCanvas gameCanvas;
+
+    public GameData(GameCanvas canvas, PlayerData playerData){
+        this.gameCanvas = canvas;
+        levelData = new LevelData(playerData);
+
+        //add the background
+        Entity background = new Entity();
+        RenderComponent backGroundComponent = new RenderComponent(levelData.getBackGroundName(), 0, 0, -1, -1);
+        background.addComponent(backGroundComponent);
+        EntityManager.getInstance().addEntity(background);
+
+
         priceData = levelData.getPrices();
-
+        slotData = levelData.getVariableSlots();
+        alienData = levelData.getAlienData();
+        menuOverlay = new MenuOverlay(this);
     }
 
-    public static int getMaxAmountOfFood() {
+    public int getMaxAmountOfFood() {
         return maxFood;
     }
 
@@ -45,18 +60,17 @@ public class GameData {
 
     }
 
-
     public void handleButtonPress(int id) {
         int buyPrice = priceData[id];
         if(totalAmountOfMoney >= buyPrice){
             switch (id){
                 case 0 -> {
-                    FactoryManager.getInstance().getFactory(fishData[0]).createEntity(100,200,0);
+                    FactoryManager.getInstance().getFactory(slotData[0]).createEntity(100,200,0);
                     buy(buyPrice);
                 }
                 case 1 -> {
                     if(this.tierFood < 2){
-                        upgradeDisplayEntity(1);
+                        menuOverlay.upgradeDisplayEntity(1);
                         this.tierFood++;
                         buy(buyPrice);
                     }
@@ -64,19 +78,19 @@ public class GameData {
                 case 2 -> {
                     if(this.maxFood < 9) {
                         this.maxFood++;
-                        upgradeDisplayEntity(2);
+                        menuOverlay.upgradeDisplayEntity(2);
                         buy(buyPrice);
                     }
                 }
                 case 3 -> {
-                    FactoryManager.getInstance().getFactory(fishData[1]).createEntity(100,400,0);
+                    FactoryManager.getInstance().getFactory(slotData[1]).createEntity(100,400,0);
                     buy(buyPrice);
                     if(currentButtonUnlocked < 4){
                         unlockNextButton();
                     }
                 }
                 case 4 -> {
-                    FactoryManager.getInstance().getFactory(fishData[2]).createEntity(100,200,0);
+                    FactoryManager.getInstance().getFactory(slotData[2]).createEntity(100,200,0);
                     buy(buyPrice);
                     if(currentButtonUnlocked < 5){
                         unlockNextButton();
@@ -86,7 +100,7 @@ public class GameData {
                     if(this.laserUpgrade < 9){
                         this.laserUpgrade++;
                         buy(buyPrice);
-                        upgradeDisplayEntity(5);
+                        menuOverlay.upgradeDisplayEntity(5);
                     }
 
                 }
@@ -95,9 +109,10 @@ public class GameData {
                     if(this.eggPiece < 2) {
                         this.eggPiece++;
                         buy(buyPrice);
-                        upgradeDisplayEntity(6);
+                        menuOverlay.upgradeDisplayEntity(6);
                     }
                     else{
+                        gameCanvas.onFinishLevel();
                         System.out.println("Level Completed!");
                     }
                 }
@@ -111,9 +126,10 @@ public class GameData {
 
     public void buy(int price){
         this.totalAmountOfMoney -= price;
+        menuOverlay.updateTotalMoneyAmount(this.totalAmountOfMoney);
     }
     public void unlockNextButton() {
-        int[] prices = this.levelData.getPrices();
+        int[] prices = levelData.getPrices();
         if (currentButtonUnlocked < 6) {
             //last button not unlocked, check the next slot that should be unlocked.
             //note that the buttons that should be unlocked are the buttons with prices != 0
@@ -136,12 +152,23 @@ public class GameData {
     public static int getTierFood(){
         return tierFood;
     }
-
-    public FishTypeComponent.FISH_TYPE[] getFishData(){
-        return this.fishData;
+    public Enum[] getSlotData(){
+        return this.slotData;
     }
 
     public int[] getPrices() {
         return this.priceData;
+    }
+
+    public int getTotalAmountMoney() {
+        return this.totalAmountOfMoney;
+    }
+
+    public int[] getTankInfo() {
+        return new int[]{levelData.getTankNumber(), levelData.getLevelNumber()};
+    }
+
+    public ImageInfo.IMAGE_NAME getBackGroundName() {
+        return levelData.getBackGroundName();
     }
 }

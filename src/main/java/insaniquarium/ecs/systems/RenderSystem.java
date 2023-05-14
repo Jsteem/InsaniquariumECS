@@ -15,7 +15,9 @@ import insaniquarium.managers.drawrequest.Sprite;
 import javafx.scene.paint.Color;
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class RenderSystem extends System {
@@ -92,15 +94,22 @@ public class RenderSystem extends System {
                 }
                 if (textComponent != null) {
                     char[] characters = textComponent.charArray;
-                    for (int i = 0; i < characters.length; i++) {
-                        char c = characters[i];
-                        int[] data = textComponent.characterToData.get(c);
-                        double offsetX = textComponent.offsetsX.get(i);
-                        RenderManager.getInstance().submitDrawRequest(
-                                new Font(textComponent.fontImage, data[0], data[1], data[2], data[3],
-                                        (int) offsetX, (int) textComponent.y, (int) (data[2] * textComponent.percentage), (int) (data[3] * textComponent.percentage)));
+                    Map<Character, int[]> characterToData = textComponent.characterToData;
+                    if(characters != null && characterToData != null){
+                        for (int i = 0; i < characters.length; i++) {
+                            char c = characters[i];
+                            int[] data = characterToData.get(c);
+                            if(data != null){
+                                double offsetX = textComponent.offsetsX.get(i);
+                                RenderManager.getInstance().submitDrawRequest(
+                                        new Font(textComponent.fontImage, data[0], data[1], data[2], data[3],
+                                                (int) offsetX, (int) textComponent.y, (int) (data[2] * textComponent.percentage), (int) (data[3] * textComponent.percentage)));
 
+                            }
+
+                        }
                     }
+
                 }
             }
         }

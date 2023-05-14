@@ -13,9 +13,9 @@ public class FishTypeComponent extends Component {
         GUPPY_STAR(0),
         CARNIVORE(1 << 9),
         ULTRAVORE(0),
-        STARCATCHER(0),
-        GUPPYCRUNSHER(0),
-        BEETLEMUNCHER(0),
+        STAR_CATCHER(0),
+        GUPPY_CRUNCHER(0),
+        BEETLE_MUNCHER(0),
         BREEDER(0),
         FISH_DEAD(1 << 10);
 

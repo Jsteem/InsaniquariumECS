@@ -9,11 +9,13 @@ import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.game.GameData;
+import insaniquarium.game.LevelData;
 import insaniquarium.utility.ImageInfo;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import static insaniquarium.utility.ImageInfo.IMAGE_NAME.*;
 
@@ -22,37 +24,62 @@ public class MenuOverlay {
     private static int[] OFFSET_BUTTON_X = {18, 87, 145, 218, 291, 364, 437};
     private static int OFFSET_BUTTON_Y = 4;
 
-    private List<MenuButton> menuButtons = new ArrayList();
+    private List<MenuButton> menuButtons;
 
-    private static Entity[] displayEntities = new Entity[7];
+    private Entity[] displayEntities = new Entity[7];
 
-    private static Entity[] displayLabels = new Entity[7];
-
+    private Entity[] displayLabels = new Entity[7];
 
     private static int[] DISPLAY_ENTITY_OFFSET_X = {47, 115, 169, 266, 300, 393, 467};
 
     private static int[] DISPLAY_ENTITY_OFFSET_Y = {25, 25, 13, 46, 25, 25, 25};
 
-    private static int[] DISPLAY_ENTITY_LABEL_OFFSET_X = {46, 115, 173, 246, 319, 392, 468};
+    private static int[] DISPLAY_ENTITY_LABEL_OFFSET_X = {46, 115, 173, 248, 323, 395, 468};
 
     private static int DISPLAY_ENTITY_LABEL_OFFSET_Y = 48;
+
+    static Entity moneyLabel = new Entity();
     GameData gameData;
 
     public MenuOverlay(GameData gameData) {
+        this.gameData = gameData;
+
+        this.menuButtons = new ArrayList<>();
         Entity background = new Entity();
         RenderComponent backGroundComponent = new RenderComponent(MENU_BAR, 0, 0, 640, 70);
         background.addComponent(backGroundComponent);
         EntityManager.getInstance().addEntity(background);
-        this.gameData = gameData;
 
-
-        for (int offsetX : OFFSET_BUTTON_X) {
-            menuButtons.add(new MenuButton(gameData, offsetX, OFFSET_BUTTON_Y));
+        for (int i = 0; i < OFFSET_BUTTON_X.length; i++){
+            int offsetX = OFFSET_BUTTON_X[i];
+            menuButtons.add(new MenuButton(this, offsetX, OFFSET_BUTTON_Y, i));
         }
 
         generateDisplayEnties();
         generateDisplayLabels();
+        generateTankInfo();
+        generateMoneyLabel();
 
+    }
+
+    private void generateMoneyLabel() {
+        TextComponent textComponent = new TextComponent(
+                CONTBOLD12, TextComponent.POSITION.LEFT,
+                "" + gameData.getTotalAmountMoney(),
+                610,40, 1.1f, Color.ORANGE);
+        moneyLabel.addComponent(textComponent);
+        EntityManager.getInstance().addEntity(moneyLabel);
+    }
+
+    private void generateTankInfo() {
+        int[] tankInfo = gameData.getTankInfo();
+        Entity tankInfoLabel = new Entity();
+        TextComponent textComponent = new TextComponent(
+                CONTBOLD12, TextComponent.POSITION.RIGHT,
+                "Tank  " + (tankInfo[0] + 1) + " - " + (tankInfo[1] + 1),
+                10,450, 1.1f, Color.ORANGE);
+        tankInfoLabel.addComponent(textComponent);
+        EntityManager.getInstance().addEntity(tankInfoLabel);
     }
 
     private void generateDisplayLabels() {
@@ -80,7 +107,7 @@ public class MenuOverlay {
     }
 
     private void generateDisplayEnties() {
-        FishTypeComponent.FISH_TYPE[] variableSlots = gameData.getFishData();
+        Enum[] variableSlots = gameData.getSlotData();
         int[] prices = gameData.getPrices();
         int slotNr = -1;
         Entity displayEntity;
@@ -154,8 +181,13 @@ public class MenuOverlay {
             button.handleMousePressed(x, y, pressed);
         }
     }
-
-    public static void upgradeDisplayEntity(int slotNr) {
+    public void updateTotalMoneyAmount(int moneyAmount){
+        TextComponent textComponent = moneyLabel.getComponent(TextComponent.class);
+        if(textComponent != null){
+            textComponent.buildText(""+moneyAmount);
+        }
+    }
+    public void upgradeDisplayEntity(int slotNr) {
         Entity entity = displayEntities[slotNr];
         if (entity != null) {
             RenderComponent component = entity.getComponent(RenderComponent.class);
@@ -178,7 +210,7 @@ public class MenuOverlay {
                 }
             }
             if (textComponent != null && slotNr == 2) {
-                int number = GameData.getMaxAmountOfFood() + 1;
+                int number = gameData.getMaxAmountOfFood() + 1;
                 textComponent.buildText("" + number);
                 if (number == 10) {
                     entity.removeComponent(textComponent.getClass());
@@ -189,10 +221,11 @@ public class MenuOverlay {
                     textComponent.buildText("MAX");
 
                 }
-
-
             }
         }
     }
 
+    public void handleButtonPress(int id) {
+        gameData.handleButtonPress(id);
+    }
 }

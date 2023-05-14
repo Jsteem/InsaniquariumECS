@@ -28,6 +28,6 @@ public class EntityManager {
         return this.entities;
     }
 
-
+    public void reset(){this.entities.clear();}
 
 }
