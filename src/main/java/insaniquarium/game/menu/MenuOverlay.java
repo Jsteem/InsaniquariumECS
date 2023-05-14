@@ -34,7 +34,7 @@ public class MenuOverlay {
 
     private static int[] DISPLAY_ENTITY_OFFSET_Y = {25, 25, 13, 46, 25, 25, 25};
 
-    private static int[] DISPLAY_ENTITY_LABEL_OFFSET_X = {46, 115, 173, 248, 323, 395, 468};
+    private static int[] DISPLAY_ENTITY_LABEL_OFFSET_X = {48, 117, 175, 248, 323, 395, 468};
 
     private static int DISPLAY_ENTITY_LABEL_OFFSET_Y = 48;
 
@@ -55,7 +55,7 @@ public class MenuOverlay {
             menuButtons.add(new MenuButton(this, offsetX, OFFSET_BUTTON_Y, i));
         }
 
-        generateDisplayEnties();
+        generateDisplayEntities();
         generateDisplayLabels();
         generateTankInfo();
         generateMoneyLabel();
@@ -65,7 +65,7 @@ public class MenuOverlay {
     private void generateMoneyLabel() {
         TextComponent textComponent = new TextComponent(
                 CONTBOLD12, TextComponent.POSITION.LEFT,
-                "" + gameData.getTotalAmountMoney(),
+                "",
                 610,40, 1.1f, Color.ORANGE);
         moneyLabel.addComponent(textComponent);
         EntityManager.getInstance().addEntity(moneyLabel);
@@ -106,7 +106,7 @@ public class MenuOverlay {
 
     }
 
-    private void generateDisplayEnties() {
+    private void generateDisplayEntities() {
         Enum[] variableSlots = gameData.getSlotData();
         int[] prices = gameData.getPrices();
         int slotNr = -1;

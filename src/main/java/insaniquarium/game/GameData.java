@@ -35,6 +35,7 @@ public class GameData {
     private GameCanvas gameCanvas;
 
     public GameData(GameCanvas canvas, PlayerData playerData){
+
         this.gameCanvas = canvas;
         levelData = new LevelData(playerData);
 
@@ -49,6 +50,7 @@ public class GameData {
         slotData = levelData.getVariableSlots();
         alienData = levelData.getAlienData();
         menuOverlay = new MenuOverlay(this);
+        menuOverlay.updateTotalMoneyAmount(totalAmountOfMoney);
     }
 
     public int getMaxAmountOfFood() {
