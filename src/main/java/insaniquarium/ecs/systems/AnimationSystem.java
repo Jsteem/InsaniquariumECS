@@ -2,8 +2,7 @@ package insaniquarium.ecs.systems;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.System;
-import insaniquarium.ecs.components.AnimationComponent;
+import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 
 import java.util.List;
 
@@ -26,6 +25,7 @@ public class AnimationSystem extends System {
                                 animationComponent.frameNr = 0;
                             }
                             else{
+                                animationComponent.frameNr = 9;
                                 animationComponent.update = false;
                             }
                         }

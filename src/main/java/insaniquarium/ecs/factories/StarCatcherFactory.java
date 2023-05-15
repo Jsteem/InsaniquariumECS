@@ -3,10 +3,11 @@ package insaniquarium.ecs.factories;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
-import insaniquarium.ecs.components.animationtypes.IdleAnimation;
+import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
+import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
+import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
-import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
 import java.util.HashMap;

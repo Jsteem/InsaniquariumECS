@@ -3,23 +3,26 @@ package insaniquarium.game;
 import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
+import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.SystemManager;
-import insaniquarium.ecs.components.RenderComponent;
-import insaniquarium.ecs.factories.GuppyFactory;
+import insaniquarium.ecs.components.*;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleNoCollision;
+import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
+import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
+import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
+import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.ecs.systems.*;
-import insaniquarium.game.menu.MenuOverlay;
+import insaniquarium.game.data.GameData;
+import insaniquarium.game.data.PlayerData;
 import insaniquarium.managers.RenderManager;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 
-import java.awt.image.BufferStrategy;
+import java.util.List;
 
 public class GameCanvas extends Canvas {
 
     public static final int GROUND_OFFSET_HEIGHT = 40;
     public static final int SIDE_OFFSET = 20;
-
-    static MenuOverlay menuOverlay;
 
     PlayerData playerData = new PlayerData("testPlayer");
     GameData gameData;
@@ -43,6 +46,7 @@ public class GameCanvas extends Canvas {
         SystemManager.getInstance().registerSystem(new CollisionSystem());
         SystemManager.getInstance().registerSystem(new GrowthSystem());
         SystemManager.getInstance().registerSystem(new MovementSystem());
+        SystemManager.getInstance().registerSystem(new AISystem());
         SystemManager.getInstance().registerRenderSystem(new RenderSystem());
 
         init();
@@ -56,12 +60,46 @@ public class GameCanvas extends Canvas {
     }
 
     public void handleMouseMoved(double x, double y) {
-        menuOverlay.handleMouseMoved(x, y);
+        gameData.handleMouseMoved(x, y);
+
+
     }
 
     public void handleMousePressed(double x, double y, boolean pressed) {
-        menuOverlay.handleMousePressed(x, y, pressed);
+        gameData.handleMousePressed(x, y, pressed);
+
+        if(y > Main.MENU_OFFSET && pressed){
+            Entity click = new Entity();
+            MovementComponent movementComponent = new MovementComponent((float) x, (float) y, 0, 0, 0, 0);
+            TargetComponent targetComponent = new TargetComponent(ClickTypeComponent.CLICK_TYPE.CLICK.value,
+                    AlienTypeComponent.ALIEN_TYPE.ALIEN.value | CoinTypeComponent.COIN_TYPE.COLLECTABLE.value);
+            HandleNoCollision handleNoCollision = new HandleNoCollision() {
+                @Override
+                public void handleNoCollision(Entity clickEntity, float x, float y) {
+                    List<Entity> specialFoodEntities = gameData.getSpecialFoodEntities();
+                    Entity foodEntity;
+                    if(!specialFoodEntities.isEmpty()){
+                        foodEntity = specialFoodEntities.get(0);
+                        MovementComponent movementComponent = foodEntity.getComponent(MovementComponent.class);
+                        movementComponent.x = x;
+                        movementComponent.y = y;
+                        specialFoodEntities.remove(0);
+
+                    }
+                    else{
+                        int tierFood = gameData.getTierFood();
+                        foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int)x, (int)y, tierFood);
+                    }
+                    EntityManager.getInstance().addEntity(foodEntity);
+                }
+            };
+            click.addComponent(handleNoCollision);
+            click.addComponent(targetComponent);
+            click.addComponent(movementComponent);
+            EntityManager.getInstance().addEntity(click);
+        }
     }
+
 
 
     public void render() {

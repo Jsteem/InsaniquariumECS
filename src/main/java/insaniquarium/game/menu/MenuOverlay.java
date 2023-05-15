@@ -1,21 +1,15 @@
 package insaniquarium.game.menu;
 
-import insaniquarium.ecs.Component;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
-import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
-import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
-import insaniquarium.game.GameData;
-import insaniquarium.game.LevelData;
-import insaniquarium.utility.ImageInfo;
+import insaniquarium.game.data.GameData;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import static insaniquarium.utility.ImageInfo.IMAGE_NAME.*;
 
@@ -38,8 +32,8 @@ public class MenuOverlay {
 
     private static int DISPLAY_ENTITY_LABEL_OFFSET_Y = 48;
 
-    static Entity moneyLabel = new Entity();
-    GameData gameData;
+    private static Entity moneyLabel = new Entity();
+    private GameData gameData;
 
     public MenuOverlay(GameData gameData) {
         this.gameData = gameData;
@@ -195,7 +189,7 @@ public class MenuOverlay {
             if (component != null) {
                 if (slotNr == 1) {
                     component.numRow++;
-                    if (GameData.getTierFood() == 1) {
+                    if (gameData.getTierFood() == 1) {
 
 
                         entity.removeComponent(component.getClass());

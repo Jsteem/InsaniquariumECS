@@ -4,7 +4,9 @@ package insaniquarium.ecs.factories;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
-import insaniquarium.ecs.components.animationtypes.*;
+import insaniquarium.ecs.components.animationtypecomponents.*;
+import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
@@ -54,15 +56,24 @@ public class GuppyFactory extends Factory{
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         guppy.addComponent(animationComponent);
 
+        BehaviorComponent behaviorComponent = new BehaviorComponent(guppy, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK_HUNGRY);
+        guppy.addComponent(behaviorComponent);
 
         int boundingCircleRadius = 20;
 
-        guppy.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        guppy.addComponent(new MovementComponent(x, y, 30, 0, 0, 0));
         guppy.addComponent(new GrowthComponent(level));
 
         guppy.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
         guppy.addComponent(new EatCollisionComponent(8, 10,0 ));
         guppy.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
+
+        guppy.addComponent(new HandleCollisionComponent() {
+            @Override
+            public void handleCollision(Entity entity, long mask) {
+
+            }
+        });
 
         EntityManager.getInstance().addEntity(guppy);
         return guppy;
@@ -78,7 +89,7 @@ public class GuppyFactory extends Factory{
                 new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
 
         guppy.addComponent(new AnimationComponent(animationComponents));
-        guppy.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        guppy.addComponent(new MovementComponent(x, y, -1, 0, 0, 0));
         return guppy;
     }
 

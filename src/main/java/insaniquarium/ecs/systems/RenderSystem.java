@@ -3,19 +3,15 @@ package insaniquarium.ecs.systems;
 import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.System;
 import insaniquarium.ecs.components.*;
-import insaniquarium.ecs.components.animationtypes.TurnAnimation;
-import insaniquarium.ecs.components.animationtypes.TurnHungryAnimation;
+import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.managers.RenderManager;
 import insaniquarium.managers.drawrequest.CircleShape;
 import insaniquarium.managers.drawrequest.Font;
 import insaniquarium.managers.drawrequest.PlainImage;
 import insaniquarium.managers.drawrequest.Sprite;
 import javafx.scene.paint.Color;
-import org.w3c.dom.Text;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,12 +56,12 @@ public class RenderSystem extends System {
                     int rowNr = animationComponent.activeType.rowNr;
                     int columnNr = animationComponent.frameNr;
                     double scale = animationComponent.activeType.scale;
-                    boolean reverse = false;
+                    boolean reverse = true;
 
                     if (movementComponent != null) {
                         sourceX = movementComponent.x;
                         sourceY = movementComponent.y;
-                        reverse = movementComponent.vx < 0;
+                        reverse = movementComponent.vx >= 0;
                     }
 
                     if (animationComponent.activeType.type == AnimationComponent.AnimationType.TURN ||

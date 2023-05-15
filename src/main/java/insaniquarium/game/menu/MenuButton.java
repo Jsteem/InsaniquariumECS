@@ -3,7 +3,6 @@ package insaniquarium.game.menu;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
-import insaniquarium.game.GameData;
 
 import static insaniquarium.utility.ImageInfo.IMAGE_NAME.*;
 

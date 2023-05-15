@@ -6,6 +6,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class EntityManager {
     private static EntityManager instance;
     private List<Entity> entities = new CopyOnWriteArrayList();
+
+
     private EntityManager(){
 
     }
@@ -29,5 +31,7 @@ public class EntityManager {
     }
 
     public void reset(){this.entities.clear();}
+
+
 
 }

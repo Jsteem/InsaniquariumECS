@@ -1,10 +1,9 @@
 package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
-import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.GrowthComponent;
-import insaniquarium.ecs.components.HandleCollisionComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.RenderComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
@@ -30,7 +29,6 @@ public class PotionFactory extends Factory{
                 }
             }
         });
-        EntityManager.getInstance().addEntity(potionEntity);
 
         return potionEntity;
     }

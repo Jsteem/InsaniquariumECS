@@ -2,9 +2,11 @@ package insaniquarium.ecs.systems;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.System;
+import insaniquarium.ecs.SystemManager;
 import insaniquarium.ecs.components.*;
 
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleNoCollision;
 import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
 import insaniquarium.utility.CollisionObject;
 import insaniquarium.utility.KDTree;
@@ -13,51 +15,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CollisionSystem extends System {
-
-    private HashMap<Long, KDTree> objectTypeToKDTree;
-
     public CollisionSystem() {
         super();
     }
 
     @Override
     public void update(double delta) {
-
-        this.objectTypeToKDTree = new HashMap<>();
+        HashMap<Long, KDTree> objectTypeToKDTree = SystemManager.getInstance().getKDTree();
         List<Entity> entities = EntityManager.getInstance().getEntities();
-        if (entities != null) {
 
-
-            for (Entity entity : entities) {
-                TargetComponent targetComponent = entity.getComponent(TargetComponent.class);
-                if (targetComponent != null) {
-                    long mask = targetComponent.maskEntityTarget;
-                    if(mask > 0)
-                    {
-                        objectTypeToKDTree.put(mask, new KDTree());
-                    }
-
-                }
-            }
-
-            for (Entity entity : entities) {
-                TargetComponent targetComponent = entity.getComponent(TargetComponent.class);
-                if (targetComponent != null) {
-                    for (long targetMask : objectTypeToKDTree.keySet()) {
-                        if ((targetMask & targetComponent.maskEntity) > 0) {
-                            BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
-                            MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
-                            if (boundingCollisionComponent != null && movementComponent != null) {
-                                objectTypeToKDTree.get(targetMask).add(
-                                        new CollisionObject(entity, movementComponent.x, movementComponent.y, boundingCollisionComponent.boundingCollisionRadius));
-                            }
-                        }
-                    }
-
-                }
-            }
-
-
+        if (objectTypeToKDTree != null && entities != null) {
             for (Entity entity : entities) {
                 boolean collisionFound = false;
                 TargetComponent targetComponent = entity.getComponent(TargetComponent.class);
@@ -87,16 +54,16 @@ public class CollisionSystem extends System {
                             double sumRadius = radius + match.radius;
                             if (distance < sumRadius) {
                                 collisionFound = true;
-                                java.lang.System.out.println("Collision found between enttity : " + entity.id + "and target: " + match.entity.id);
+                                //java.lang.System.out.println("Collision found between enttity : " + entity.id + "and target: " + match.entity.id);
 
                                 //handle the collision for the entity itself
                                 HandleCollisionComponent handleCollisionComponent = entity.getComponent(HandleCollisionComponent.class);
-                                if(handleCollisionComponent != null){
+                                if (handleCollisionComponent != null) {
                                     handleCollisionComponent.handleCollision(entity, targetComponent.maskEntityTarget);
                                 }
                                 //handle the collision for the target
                                 HandleCollisionComponent handleCollisionComponentTarget = match.entity.getComponent(HandleCollisionComponent.class);
-                                if(handleCollisionComponentTarget != null){
+                                if (handleCollisionComponentTarget != null) {
                                     handleCollisionComponentTarget.handleCollision(match.entity, targetComponent.maskEntity);
                                 }
                             }
@@ -106,15 +73,14 @@ public class CollisionSystem extends System {
 
                 }
                 //delete click entities
-                if(targetComponent != null && (targetComponent.maskEntity & ClickTypeComponent.CLICK_TYPE.CLICK.value) > 0){
+                if (targetComponent != null && (targetComponent.maskEntity & ClickTypeComponent.CLICK_TYPE.CLICK.value) > 0) {
                     HandleNoCollision handleNoCollision = entity.getComponent(HandleNoCollision.class);
-                    if(handleNoCollision != null && !collisionFound){
+                    if (handleNoCollision != null && !collisionFound) {
                         handleNoCollision.handleNoCollision(entity, movementComponent.x, movementComponent.y);
                     }
                     entities.remove(entity);
                 }
             }
         }
-
     }
 }

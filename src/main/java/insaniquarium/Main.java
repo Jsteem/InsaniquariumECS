@@ -21,6 +21,8 @@ import static insaniquarium.utility.ImageInfo.IMAGE_NAME.CONTBOLD12;
 
 
 public class Main extends Application {
+    public static final int SIDE_OFFSET = 20;
+    public static final int GROUND_OFFSET_HEIGHT = 30;
     private GameCanvas canvas;
     public static final int WIDTH = 640;
     public static final int MENU_OFFSET = 70;
@@ -73,19 +75,6 @@ public class Main extends Application {
 
 
             canvas.handleMousePressed(x, y, true);
-
-            if(y > MENU_OFFSET){
-                Entity click = new Entity();
-                MovementComponent movementComponent = new MovementComponent((float) x, (float) y, 0, 0, 0, 0);
-                TargetComponent targetComponent = new TargetComponent(ClickTypeComponent.CLICK_TYPE.CLICK.value,
-                        AlienTypeComponent.ALIEN_TYPE.ALIEN.value | CoinTypeComponent.COIN_TYPE.COLLECTABLE.value);
-                HandleNoCollision handleNoCollision = new HandleNoCollision();
-                click.addComponent(handleNoCollision);
-                click.addComponent(targetComponent);
-                click.addComponent(movementComponent);
-                EntityManager.getInstance().addEntity(click);
-            }
-
 
 
         });

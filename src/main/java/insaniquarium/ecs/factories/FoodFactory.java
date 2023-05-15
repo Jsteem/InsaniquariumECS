@@ -3,7 +3,9 @@ package insaniquarium.ecs.factories;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
-import insaniquarium.ecs.components.animationtypes.*;
+import insaniquarium.ecs.components.animationtypecomponents.*;
+import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
@@ -31,7 +33,15 @@ public class FoodFactory extends Factory{
 
         food.addComponent(new TargetComponent(FoodTypeComponent.FOOD_TYPE.FOOD.value, 0));
 
-        EntityManager.getInstance().addEntity(food);
+        food.addComponent(new BehaviorComponent(food, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, null));
+
+        food.addComponent(new HandleCollisionComponent() {
+            @Override
+            public void handleCollision(Entity entity, long mask) {
+                EntityManager.getInstance().removeEntity(entity);
+            }
+        });
+
         return food;
     }
 

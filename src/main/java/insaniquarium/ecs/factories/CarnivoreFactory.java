@@ -3,7 +3,7 @@ package insaniquarium.ecs.factories;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
-import insaniquarium.ecs.components.animationtypes.*;
+import insaniquarium.ecs.components.animationtypecomponents.*;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
