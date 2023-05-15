@@ -54,17 +54,12 @@ public class CollisionSystem extends System {
                             double sumRadius = radius + match.radius;
                             if (distance < sumRadius) {
                                 collisionFound = true;
-                                //java.lang.System.out.println("Collision found between enttity : " + entity.id + "and target: " + match.entity.id);
+                                //java.lang.System.out.println("Collision found between entity : " + entity.id + "and target: " + match.entity.id);
 
                                 //handle the collision for the entity itself
                                 HandleCollisionComponent handleCollisionComponent = entity.getComponent(HandleCollisionComponent.class);
                                 if (handleCollisionComponent != null) {
-                                    handleCollisionComponent.handleCollision(entity, targetComponent.maskEntityTarget);
-                                }
-                                //handle the collision for the target
-                                HandleCollisionComponent handleCollisionComponentTarget = match.entity.getComponent(HandleCollisionComponent.class);
-                                if (handleCollisionComponentTarget != null) {
-                                    handleCollisionComponentTarget.handleCollision(match.entity, targetComponent.maskEntity);
+                                    handleCollisionComponent.handleCollision(entity, match.entity, targetComponent.maskEntityTarget);
                                 }
                             }
 

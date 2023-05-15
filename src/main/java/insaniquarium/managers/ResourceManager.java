@@ -9,9 +9,9 @@ import java.util.HashMap;
 public class ResourceManager {
     private static ResourceManager instance;
 
-    private HashMap<ImageInfo.IMAGE_NAME, GameImage> images = new HashMap();
+    private HashMap<ImageInfo.IMAGE_NAME, GameImage> images = new HashMap<>();
 
-    private HashMap<ImageInfo.IMAGE_NAME, ImageInfo> nameToInfo = new HashMap();
+    private HashMap<ImageInfo.IMAGE_NAME, ImageInfo> nameToInfo = new HashMap<>();
 
     private ResourceManager(){
         loadImageInfo();

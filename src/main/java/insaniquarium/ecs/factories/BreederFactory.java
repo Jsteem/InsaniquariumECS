@@ -17,7 +17,7 @@ public class BreederFactory extends Factory{
     @Override
     public Entity createEntity(int x, int y, int level) {
         Entity breeder = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.BREEDER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
@@ -67,7 +67,7 @@ public class BreederFactory extends Factory{
     public Entity createDisplayEntity(int x, int y) {
 
         Entity breeder = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.BREEDER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.7));

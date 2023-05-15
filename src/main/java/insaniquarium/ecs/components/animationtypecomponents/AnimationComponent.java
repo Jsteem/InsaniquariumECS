@@ -20,6 +20,7 @@ public class AnimationComponent extends Component {
     HashMap<AnimationType, AnimationTypeComponent> types;
 
 
+
     //our sprites have typically these animations: IDLE, TURN, EAT, DIE, HUNGRY_IDLE, HUNGRY_TURN, HUNGRY_EAT
     public enum AnimationType{
         IDLE,EAT,TURN,DIE, HUNGRY_IDLE, HUNGRY_TURN, HUNGRY_EAT
@@ -31,6 +32,11 @@ public class AnimationComponent extends Component {
     public void setActiveType(AnimationType animationType){
         animationComplete = false;
         frameNr = 0;
+        update = true;
+        activeType = types.get(animationType);
+    }
+    public void setActiveTypeSmooth(AnimationType animationType) {
+        animationComplete = false;
         update = true;
         activeType = types.get(animationType);
     }

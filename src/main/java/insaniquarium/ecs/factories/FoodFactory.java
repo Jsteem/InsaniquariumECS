@@ -6,6 +6,7 @@ import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.*;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleNoCollision;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
@@ -17,7 +18,7 @@ public class FoodFactory extends Factory{
 
         Entity food = new Entity();
 
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.FOOD, AnimationComponent.AnimationType.IDLE, level, 0.07, true, 1));
@@ -25,7 +26,7 @@ public class FoodFactory extends Factory{
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         food.addComponent(animationComponent);
 
-        int boundingCircleRadius = 20;
+        int boundingCircleRadius = 15;
 
         food.addComponent(new MovementComponent(x, y, 0, 20, 0, 0));
 
@@ -35,12 +36,7 @@ public class FoodFactory extends Factory{
 
         food.addComponent(new BehaviorComponent(food, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, null));
 
-        food.addComponent(new HandleCollisionComponent() {
-            @Override
-            public void handleCollision(Entity entity, long mask) {
-                EntityManager.getInstance().removeEntity(entity);
-            }
-        });
+
 
         return food;
     }

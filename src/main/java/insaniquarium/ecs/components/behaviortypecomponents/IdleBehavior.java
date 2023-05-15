@@ -14,10 +14,12 @@ public class IdleBehavior extends BehaviorTypeComponent {
     public void onEnter(Entity entity, BehaviorComponent component) {
         component.triggerNextBehaviorTimeMs = durationBehaviorMs;
         component.passedTimeMs = 0;
+
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
         if (animationComponent != null) {
-            animationComponent.setActiveType(AnimationComponent.AnimationType.IDLE);
+            animationComponent.setActiveTypeSmooth(AnimationComponent.AnimationType.IDLE);
         }
+        component.sick = false;
     }
 
     @Override
@@ -37,10 +39,14 @@ public class IdleBehavior extends BehaviorTypeComponent {
 
     @Override
     public void onExit(Entity entity, BehaviorComponent component) {
+        component.passedTimeMs = 0;
+        component.previousBehavior = this;
         if(component.nextBehavior != null){
-            component.passedTimeMs = 0;
-            component.previousBehavior = this;
+
             component.currentBehavior = component.nextBehavior;
+        }
+        else{
+            component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
         }
     }
 }

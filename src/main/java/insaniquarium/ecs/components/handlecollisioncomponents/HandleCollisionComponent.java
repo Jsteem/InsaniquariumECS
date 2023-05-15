@@ -5,5 +5,5 @@ import insaniquarium.ecs.Entity;
 
 public abstract class HandleCollisionComponent extends Component {
 
-    public abstract  void handleCollision(Entity entity, long mask);
+    public abstract  void handleCollision(Entity entity, Entity target, long mask);
 }

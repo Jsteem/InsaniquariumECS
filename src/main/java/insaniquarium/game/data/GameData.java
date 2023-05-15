@@ -8,9 +8,7 @@ import insaniquarium.ecs.components.TargetComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.game.GameCanvas;
 import insaniquarium.game.menu.MenuOverlay;
-import insaniquarium.utility.ImageInfo;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,16 +174,8 @@ public class GameData {
         return this.priceData;
     }
 
-    public int getTotalAmountMoney() {
-        return this.totalAmountOfMoney;
-    }
-
     public int[] getTankInfo() {
         return new int[]{levelData.getTankNumber(), levelData.getLevelNumber()};
-    }
-
-    public ImageInfo.IMAGE_NAME getBackGroundName() {
-        return levelData.getBackGroundName();
     }
 
     public void handleMouseMoved(double x, double y) {
@@ -194,5 +184,18 @@ public class GameData {
 
     public void handleMousePressed(double x, double y, boolean pressed) {
         menuOverlay.handleMousePressed(x, y, pressed);
+    }
+
+    public boolean subtractFromTotalAmountOfMoney(int amount) {
+        if(this.totalAmountOfMoney >= amount){
+            this.totalAmountOfMoney -= amount;
+            menuOverlay.updateTotalMoneyAmount(totalAmountOfMoney);
+            return true;
+        }
+        return false;
+    }
+    public void addToTotalAmountOfMoney(int amount){
+        this.totalAmountOfMoney += amount;
+        menuOverlay.updateTotalMoneyAmount(totalAmountOfMoney);
     }
 }

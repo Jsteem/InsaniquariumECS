@@ -4,6 +4,8 @@ import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.*;
+import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
@@ -18,7 +20,7 @@ public class CarnivoreFactory extends Factory{
     @Override
     public Entity createEntity(int x, int y, int level) {
         Entity carnivore = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, 4, 0.07, true, 1));
@@ -53,13 +55,31 @@ public class CarnivoreFactory extends Factory{
 
         int boundingCircleRadius = 40;
 
-        carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        carnivore.addComponent(new MovementComponent(x, y, 10, 0, 0, 0));
 
 
         carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
         carnivore.addComponent(new EatCollisionComponent(14,20, 0));
         carnivore.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.CARNIVORE.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));
+        carnivore.addComponent(new BehaviorComponent(carnivore, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK));
+        carnivore.addComponent(new HandleCollisionComponent() {
+            @Override
+            public void handleCollision(Entity entity, Entity target, long mask) {
+                BehaviorComponent behaviorComponent = entity.getComponent(BehaviorComponent.class);
+                AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
 
+                if (behaviorComponent != null && animationComponent != null) {
+                    if (animationComponent.animationComplete)
+                        if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
+                            behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
+                            behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
+                            behaviorComponent.currentBehavior.onEnter(entity, behaviorComponent);
+                            EntityManager.getInstance().removeEntity(target);
+
+                        }
+                }
+            }
+        });
         EntityManager.getInstance().addEntity(carnivore);
         return carnivore;
     }
@@ -67,7 +87,7 @@ public class CarnivoreFactory extends Factory{
     @Override
     public Entity createDisplayEntity(int x, int y) {
         Entity carnivore = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, 4, 0.07, true, 0.5));

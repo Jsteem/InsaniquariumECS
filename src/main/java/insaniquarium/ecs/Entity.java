@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Entity {
-    private List<Component> components = new CopyOnWriteArrayList();
+    private List<Component> components = new CopyOnWriteArrayList<>();
     private static long totalIds = 0;
     public long id;
 

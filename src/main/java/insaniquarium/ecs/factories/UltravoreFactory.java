@@ -15,7 +15,7 @@ public class UltravoreFactory extends Factory{
     @Override
     public Entity createEntity(int x, int y, int level) {
         Entity ultravore = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.ULTRAVORE, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
@@ -55,7 +55,7 @@ public class UltravoreFactory extends Factory{
     public Entity createDisplayEntity(int x, int y) {
 
         Entity ultravore = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.ULTRAVORE, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.28));

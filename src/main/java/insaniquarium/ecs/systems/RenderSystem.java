@@ -64,6 +64,11 @@ public class RenderSystem extends System {
                         reverse = movementComponent.vx >= 0;
                     }
 
+                    GrowthComponent growthComponent = entity.getComponent(GrowthComponent.class);
+                    if(growthComponent != null){
+                        rowNr = growthComponent.growthLevel;
+                    }
+
                     if (animationComponent.activeType.type == AnimationComponent.AnimationType.TURN ||
                             animationComponent.activeType.type == AnimationComponent.AnimationType.HUNGRY_TURN) {
                         reverse = !reverse;

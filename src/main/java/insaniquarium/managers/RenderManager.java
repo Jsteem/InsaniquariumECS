@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class RenderManager {
     private static RenderManager instance;
-    private ArrayList<DrawRequest> drawRequests = new ArrayList();
+    private ArrayList<DrawRequest> drawRequests = new ArrayList<>();
 
     private RenderManager(){}
 

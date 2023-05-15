@@ -18,7 +18,7 @@ public class BeetleMuncherFactory extends Factory{
     @Override
     public Entity createEntity(int x, int y, int level) {
         Entity beetleMuncher = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.BEETLE_MUNCHER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
@@ -68,7 +68,7 @@ public class BeetleMuncherFactory extends Factory{
     public Entity createDisplayEntity(int x, int y) {
 
         Entity beetleMuncher = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.BEETLE_MUNCHER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.45));

@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EntityManager {
     private static EntityManager instance;
-    private List<Entity> entities = new CopyOnWriteArrayList();
+    private List<Entity> entities = new CopyOnWriteArrayList<>();
 
 
     private EntityManager(){

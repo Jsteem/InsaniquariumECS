@@ -6,6 +6,7 @@ import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.SystemManager;
 import insaniquarium.ecs.components.*;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleNoCollision;
 import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
 import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
@@ -27,12 +28,13 @@ public class GameCanvas extends Canvas {
     PlayerData playerData = new PlayerData("testPlayer");
     GameData gameData;
 
-    private void init(){
+    private void init() {
 
 
         gameData = new GameData(this, playerData);
 
     }
+
     public void onFinishLevel() {
         playerData.increaseLevel();
         EntityManager.getInstance().reset();
@@ -44,7 +46,6 @@ public class GameCanvas extends Canvas {
         //create the systems
         SystemManager.getInstance().registerSystem(new AnimationSystem());
         SystemManager.getInstance().registerSystem(new CollisionSystem());
-        SystemManager.getInstance().registerSystem(new GrowthSystem());
         SystemManager.getInstance().registerSystem(new MovementSystem());
         SystemManager.getInstance().registerSystem(new AISystem());
         SystemManager.getInstance().registerRenderSystem(new RenderSystem());
@@ -68,7 +69,7 @@ public class GameCanvas extends Canvas {
     public void handleMousePressed(double x, double y, boolean pressed) {
         gameData.handleMousePressed(x, y, pressed);
 
-        if(y > Main.MENU_OFFSET && pressed){
+        if (y > Main.MENU_OFFSET && pressed) {
             Entity click = new Entity();
             MovementComponent movementComponent = new MovementComponent((float) x, (float) y, 0, 0, 0, 0);
             TargetComponent targetComponent = new TargetComponent(ClickTypeComponent.CLICK_TYPE.CLICK.value,
@@ -78,28 +79,68 @@ public class GameCanvas extends Canvas {
                 public void handleNoCollision(Entity clickEntity, float x, float y) {
                     List<Entity> specialFoodEntities = gameData.getSpecialFoodEntities();
                     Entity foodEntity;
-                    if(!specialFoodEntities.isEmpty()){
+                    if (!specialFoodEntities.isEmpty()) {
                         foodEntity = specialFoodEntities.get(0);
                         MovementComponent movementComponent = foodEntity.getComponent(MovementComponent.class);
                         movementComponent.x = x;
                         movementComponent.y = y;
                         specialFoodEntities.remove(0);
+                        EntityManager.getInstance().addEntity(foodEntity);
+                    } else if (gameData.subtractFromTotalAmountOfMoney(5)) {
+
+                        int tierFood = gameData.getTierFood();
+                        foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int) x, (int) y, tierFood);
+                        EntityManager.getInstance().addEntity(foodEntity);
 
                     }
-                    else{
-                        int tierFood = gameData.getTierFood();
-                        foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int)x, (int)y, tierFood);
-                    }
-                    EntityManager.getInstance().addEntity(foodEntity);
+
                 }
             };
+            click.addComponent(new HandleCollisionComponent() {
+                @Override
+                public void handleCollision(Entity entity, Entity target, long mask) {
+
+                    GrowthComponent growthComponent = target.getComponent(GrowthComponent.class);
+                    if(growthComponent != null){
+                        int money = 0;
+                        int level = growthComponent.growthLevel;
+                        switch (level) {
+                            case 0 -> {
+                                money = 10;
+                                //SoundManager.getInstance().playSound("POINTS.ogg");
+                            }
+                            case 1 -> {
+                                money = 15;
+                                //SoundManager.getInstance().playSound("POINTS.ogg");
+                            }
+                            case 2 -> {
+                                money = 20;
+                                //SoundManager.getInstance().playSound("POINTS.ogg");
+                            }
+                            case 3 -> {
+                                money = 200;
+                                //SoundManager.getInstance().playSound("diamond.ogg");
+                            }
+                            case 4 -> {
+                                money = 2000;
+                                //SoundManager.getInstance().playSound("TREASURE.ogg");
+                            }
+                            case 5 -> {
+                                money = 30;
+                                //SoundManager.getInstance().playSound("POINTS.ogg");
+                            }
+                        }
+                        gameData.addToTotalAmountOfMoney(money);
+                    }
+                    EntityManager.getInstance().removeEntity(target);
+                }
+            });
             click.addComponent(handleNoCollision);
             click.addComponent(targetComponent);
             click.addComponent(movementComponent);
             EntityManager.getInstance().addEntity(click);
         }
     }
-
 
 
     public void render() {

@@ -16,9 +16,10 @@ public class FallBehavior extends BehaviorTypeComponent {
     @Override
     public void onEnter(Entity entity, BehaviorComponent component) {
         component.passedTimeMs = 0;
-        component.triggerNextBehaviorTimeMs = durationBehaviorMs;
+        component.triggerNextBehaviorTimeMs = 0;
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
         movementComponent.vy = 100;
+        movementComponent.vx *= 0.1;
     }
 
     @Override
@@ -48,6 +49,15 @@ public class FallBehavior extends BehaviorTypeComponent {
 
     @Override
     public void onExit(Entity entity, BehaviorComponent component) {
-        EntityManager.getInstance().removeEntity(entity);
+        if (component.nextBehavior != null) {
+            component.passedTimeMs = 0;
+            component.previousBehavior = this;
+            component.currentBehavior = component.nextBehavior;
+            component.nextBehavior = null;
+        }
+        else{
+            EntityManager.getInstance().removeEntity(entity);
+        }
+
     }
 }

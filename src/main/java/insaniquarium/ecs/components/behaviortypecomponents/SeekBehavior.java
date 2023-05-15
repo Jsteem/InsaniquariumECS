@@ -5,23 +5,24 @@ import insaniquarium.ecs.SystemManager;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.TargetComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
+import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.utility.CollisionObject;
 import insaniquarium.utility.KDTree;
 
-public class SeekHungryBehavior extends BehaviorTypeComponent {
-    public SeekHungryBehavior(long triggerNextBehaviorTime) {
+public class SeekBehavior extends BehaviorTypeComponent {
+    public SeekBehavior(long triggerNextBehaviorTime) {
         super(triggerNextBehaviorTime);
     }
 
     @Override
     public void onEnter(Entity entity, BehaviorComponent component) {
         component.triggerNextBehaviorTimeMs = durationBehaviorMs;
-        component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK_HUNGRY);
+        //component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
         if (component.sick) {
             component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
             AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
             if (animationComponent != null) {
-                animationComponent.setActiveType(AnimationComponent.AnimationType.HUNGRY_IDLE);
+                animationComponent.setActiveTypeSmooth(AnimationComponent.AnimationType.HUNGRY_IDLE);
             }
 
         }
@@ -95,14 +96,17 @@ public class SeekHungryBehavior extends BehaviorTypeComponent {
             if (animationComponent.animationComplete) {
 
                 if (!component.sick) {
-                    animationComponent.setActiveType(AnimationComponent.AnimationType.IDLE);
+                    animationComponent.setActiveTypeSmooth(AnimationComponent.AnimationType.IDLE);
                 } else {
-                    animationComponent.setActiveType(AnimationComponent.AnimationType.HUNGRY_IDLE);
+                    animationComponent.setActiveTypeSmooth(AnimationComponent.AnimationType.HUNGRY_IDLE);
                 }
             }
 
             movementComponent.vx = (float) finalVelocityX;
-            movementComponent.vy = (float) finalVelocityY;
+            if(!component.boundToGround){
+                movementComponent.vy = (float) finalVelocityY;
+            }
+
         }
 
 
@@ -118,14 +122,17 @@ public class SeekHungryBehavior extends BehaviorTypeComponent {
         if (component.nextBehavior != null) {
             component.passedTimeMs = 0;
             component.previousBehavior = this;
-            component.currentBehavior = component.nextBehavior;
             if (!component.sick) {
                 component.sick = true;
+                component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
             } else {
                 AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
                 if (animationComponent != null) {
-
+                    component.currentBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
+                    component.nextBehavior = null;
                     animationComponent.setActiveType(AnimationComponent.AnimationType.DIE);
+                    TargetComponent targetComponent = entity.getComponent(TargetComponent.class);
+                    targetComponent.maskEntity = FishTypeComponent.FISH_TYPE.FISH_DEAD.value;
                 }
             }
 

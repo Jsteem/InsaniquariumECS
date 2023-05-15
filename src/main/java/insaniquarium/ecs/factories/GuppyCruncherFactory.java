@@ -15,7 +15,7 @@ public class GuppyCruncherFactory extends Factory{
     @Override
     public Entity createEntity(int x, int y, int level) {
         Entity guppyCruncher = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.GUPPY_CRUNCHER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
@@ -58,7 +58,7 @@ public class GuppyCruncherFactory extends Factory{
     public Entity createDisplayEntity(int x, int y) {
 
         Entity guppyCruncher = new Entity();
-        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap();
+        HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
         animationComponents.put(
                 AnimationComponent.AnimationType.IDLE,
                 new IdleAnimation(ImageInfo.IMAGE_NAME.GUPPY_CRUNCHER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.45));
