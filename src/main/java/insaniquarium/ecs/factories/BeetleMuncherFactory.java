@@ -74,7 +74,7 @@ public class BeetleMuncherFactory extends Factory{
                 new IdleAnimation(ImageInfo.IMAGE_NAME.BEETLE_MUNCHER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.45));
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         beetleMuncher.addComponent(animationComponent);
-        beetleMuncher.addComponent(new MovementComponent(x +44, y+24, 0, 0, 0, 0));
+        beetleMuncher.addComponent(new MovementComponent(x-3, y+3, 0, 0, 0, 0));
         return beetleMuncher;
     }
 }

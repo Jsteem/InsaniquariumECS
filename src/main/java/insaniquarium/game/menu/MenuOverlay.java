@@ -24,9 +24,9 @@ public class MenuOverlay {
 
     private Entity[] displayLabels = new Entity[7];
 
-    private static int[] DISPLAY_ENTITY_OFFSET_X = {47, 115, 169, 266, 300, 393, 467};
+    private static int[] DISPLAY_ENTITY_OFFSET_X = {47, 115, 169, 245, 320, 393, 467};
 
-    private static int[] DISPLAY_ENTITY_OFFSET_Y = {25, 25, 13, 46, 25, 25, 25};
+    private static int[] DISPLAY_ENTITY_OFFSET_Y = {25, 25, 13, 25, 25, 25, 25};
 
     private static int[] DISPLAY_ENTITY_LABEL_OFFSET_X = {48, 117, 175, 248, 323, 395, 468};
 
@@ -44,9 +44,13 @@ public class MenuOverlay {
         background.addComponent(backGroundComponent);
         EntityManager.getInstance().addEntity(background);
 
-        for (int i = 0; i < OFFSET_BUTTON_X.length; i++){
+        int[] prices = gameData.getPrices();
+        for (int i = 0; i < prices.length; i++){
             int offsetX = OFFSET_BUTTON_X[i];
-            menuButtons.add(new MenuButton(this, offsetX, OFFSET_BUTTON_Y, i));
+            if(prices[i] > 0){
+                menuButtons.add(new MenuButton(this, offsetX, OFFSET_BUTTON_Y, i));
+            }
+
         }
 
         generateDisplayEntities();
@@ -166,13 +170,17 @@ public class MenuOverlay {
 
     public void handleMouseMoved(double x, double y) {
         for (MenuButton button : menuButtons) {
-            button.handleMouseMoved(x, y);
+            if(button != null){
+                button.handleMouseMoved(x, y);
+            }
         }
     }
 
     public void handleMousePressed(double x, double y, boolean pressed) {
         for (MenuButton button : menuButtons) {
-            button.handleMousePressed(x, y, pressed);
+            if(button != null){
+                button.handleMousePressed(x, y, pressed);
+            }
         }
     }
     public void updateTotalMoneyAmount(int moneyAmount){

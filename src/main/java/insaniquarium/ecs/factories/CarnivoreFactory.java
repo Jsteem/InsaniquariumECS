@@ -73,7 +73,8 @@ public class CarnivoreFactory extends Factory{
                 new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM, AnimationComponent.AnimationType.IDLE, 4, 0.07, true, 0.5));
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         carnivore.addComponent(animationComponent);
-        carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        carnivore.addComponent(new MovementComponent(x, y, -1, 0, 0, 0));
+
 
         return carnivore;
     }

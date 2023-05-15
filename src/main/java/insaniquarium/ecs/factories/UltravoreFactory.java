@@ -61,7 +61,7 @@ public class UltravoreFactory extends Factory{
                 new IdleAnimation(ImageInfo.IMAGE_NAME.ULTRAVORE, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.28));
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         ultravore.addComponent(animationComponent);
-        ultravore.addComponent(new MovementComponent(x + 78 , y + 60, 0, 0, 0, 0));
+        ultravore.addComponent(new MovementComponent(x  , y , -1, 0, 0, 0));
         return ultravore;
     }
 }

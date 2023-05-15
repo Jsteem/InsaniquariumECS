@@ -67,7 +67,7 @@ public class GuppyCruncherFactory extends Factory{
 
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         guppyCruncher.addComponent(animationComponent);
-        guppyCruncher.addComponent(new MovementComponent(x + 3 , y, 0, 0, 0, 0));
+        guppyCruncher.addComponent(new MovementComponent(x , y, 0, 0, 0, 0));
         return guppyCruncher;
     }
 }

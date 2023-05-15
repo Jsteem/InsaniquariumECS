@@ -73,7 +73,7 @@ public class BreederFactory extends Factory{
                 new IdleAnimation(ImageInfo.IMAGE_NAME.BREEDER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.7));
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         breeder.addComponent(animationComponent);
-        breeder.addComponent(new MovementComponent(x +13, y + 14, 0, 0, 0, 0));
+        breeder.addComponent(new MovementComponent(x-3 , y , 0, 0, 0, 0));
         return breeder;
     }
 }

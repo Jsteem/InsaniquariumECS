@@ -41,15 +41,15 @@ public class Sprite extends DrawRequest {
         int sw = imageInfo.cellWidth;
         int sh = imageInfo.cellHeight;
 
-        int dx = x - imageInfo.cellWidth / 2;
-        int dy = y - imageInfo.cellHeight / 2;
+        int dx = (int) (x - (imageInfo.cellWidth / 2) * scale);
+        int dy = (int) (y - (imageInfo.cellHeight / 2) * scale);
         int dw = (int) (imageInfo.cellWidth * scale);
         int dh = (int) (imageInfo.cellHeight * scale);
 
 
         if (reversed) {
             graphics.scale(-1, 1);
-            dx = -x - imageInfo.cellWidth / 2;
+            dx = (int) (-x - (imageInfo.cellWidth / 2) * scale);
 
             graphics.drawImage(image.getImage(), sx, sy, sw, sh,
                     dx, dy, dw, dh);

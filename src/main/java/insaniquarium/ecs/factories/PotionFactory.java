@@ -36,7 +36,7 @@ public class PotionFactory extends Factory{
     @Override
     public Entity createDisplayEntity(int x, int y) {
         Entity food = new Entity();
-        food.addComponent(new RenderComponent(ImageInfo.IMAGE_NAME.FOOD, x - 14, y - 16, 3, 0, 0.75));
+        food.addComponent(new RenderComponent(ImageInfo.IMAGE_NAME.FOOD, x , y , 3, 0, 0.75));
         return food;
     }
 }

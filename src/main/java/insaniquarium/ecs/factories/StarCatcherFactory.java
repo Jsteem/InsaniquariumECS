@@ -58,7 +58,8 @@ public class StarCatcherFactory extends Factory{
                 new IdleAnimation(ImageInfo.IMAGE_NAME.STAR_CATCHER, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 0.5));
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         starCatcher.addComponent(animationComponent);
-        starCatcher.addComponent(new MovementComponent(x +40, y+20, 0, 0, 0, 0));
+        starCatcher.addComponent(new MovementComponent(x , y, 0, 0, 0, 0));
+        starCatcher.addComponent(new BoundingCollisionComponent(10));
         return starCatcher;
     }
 }
