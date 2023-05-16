@@ -2,10 +2,12 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
+import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.*;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
+import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
@@ -69,7 +71,10 @@ public class CarnivoreFactory extends Factory{
                 AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
 
                 if (behaviorComponent != null && animationComponent != null) {
-                    if (animationComponent.animationComplete)
+                    if (animationComponent.animationComplete ||
+                            (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN &&
+                                    animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)
+                    ) {
                         if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
                             behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
                             behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
@@ -77,9 +82,15 @@ public class CarnivoreFactory extends Factory{
                             EntityManager.getInstance().removeEntity(target);
 
                         }
+                    }
                 }
             }
         });
+
+        SpawnComponent spawnComponent = new SpawnComponent(carnivore,
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 1000, 3);
+        carnivore.addComponent(spawnComponent);
+
         EntityManager.getInstance().addEntity(carnivore);
         return carnivore;
     }

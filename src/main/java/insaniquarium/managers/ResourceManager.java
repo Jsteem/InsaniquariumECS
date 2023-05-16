@@ -2,8 +2,11 @@ package insaniquarium.managers;
 
 import insaniquarium.utility.GameImage;
 import insaniquarium.utility.ImageInfo;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class ResourceManager {
@@ -27,16 +30,99 @@ public class ResourceManager {
     }
 
     public GameImage getImage(ImageInfo.IMAGE_NAME imageName){
+        ImageInfo info = nameToInfo.get(imageName);
         GameImage image = images.get(imageName);
         if(image == null){
-            ImageInfo info = nameToInfo.get(imageName);
-
-            image = new GameImage(info);
-            images.put(imageName, image);
+            if(info.imageName != null){
+                image = images.get(info.imageName);
+                GameImage imageClone = new GameImage(image, info);
+                if(info.replaceColors != null){
+                    images.put(imageName, alterGameImageColors(imageClone, info.replaceColors, info.replaceColor));
+                }
+                else{
+                    images.put(imageName, alterGameImageIntensity(
+                            imageClone, info.transparency, info.greenFactor, info.blueFactor, info.redFactor));
+                }
+            }
+            else{
+                image = new GameImage(info);
+                images.put(imageName, image);
+            }
         }
         return image;
     }
 
+    public GameImage alterGameImageColors(GameImage gameImage, int[] colorsFrom, int colorTo){
+
+        int width = (int) gameImage.getImage().getWidth();
+        int height = (int) gameImage.getImage().getHeight();
+
+        BufferedImage original = new BufferedImage(width, height, Transparency.TRANSLUCENT);
+        SwingFXUtils.fromFXImage(gameImage.getImage(), original);
+        BufferedImage combined = new BufferedImage(width, height, Transparency.TRANSLUCENT);
+
+        for (int x = 0; x < original.getWidth(); x++) {
+            for (int y = 0; y < original.getHeight(); y++) {
+                int originalRGB = original.getRGB(x, y);
+                for(int colorFrom : colorsFrom){
+                    if (originalRGB == colorFrom) {
+                        originalRGB = colorTo;
+                    }
+                }
+                combined.setRGB(x, y, originalRGB);
+            }
+        }
+
+        gameImage.setImage(SwingFXUtils.toFXImage(combined, null));
+        return gameImage;
+    }
+    public GameImage alterGameImageIntensity(
+            GameImage gameImage,
+            float transparency,
+            double greenFactor,
+            double blueFactor,
+            double redFactor){
+
+
+        int width = (int) gameImage.getImage().getWidth();
+        int height = (int) gameImage.getImage().getHeight();
+
+        BufferedImage original = new BufferedImage(width, height, Transparency.TRANSLUCENT);
+        SwingFXUtils.fromFXImage(gameImage.getImage(), original);
+        BufferedImage combined = new BufferedImage(width, height, Transparency.TRANSLUCENT);
+
+        for (int x = 0; x < original.getWidth(); x++) {
+            for (int y = 0; y < original.getHeight(); y++) {
+                int originalRGB = original.getRGB(x, y);
+
+                // Extract RGB channels from the original image
+                int originalRed = (originalRGB >> 16) & 0xFF;
+                int originalGreen = (originalRGB >> 8) & 0xFF;
+                int originalBlue = originalRGB & 0xFF;
+
+                int newGreen = (int) (originalGreen * greenFactor);
+                int newBlue = (int) (originalBlue * blueFactor);
+                int newRed = (int) (originalRed * redFactor);
+                // Ensure the channel values stay within the valid range (0-255)
+                newGreen = Math.min(newGreen, 255);
+                newBlue = Math.min(newBlue, 255);
+                newRed = Math.min(newRed, 255);
+
+                // Extract the alpha channel from the mask image
+                int maskAlpha = (originalRGB >> 24) & 0xFF;
+
+                // Calculate the new alpha value based on the transparency
+                int newAlpha = (int) (transparency * maskAlpha);
+
+                // Combine the original RGB channels with the new alpha value
+                int masked = (newAlpha << 24) | (newRed << 16) | (newGreen << 8) | newBlue;
+
+                combined.setRGB(x, y, masked);
+            }
+        }
+        gameImage.setImage(SwingFXUtils.toFXImage(combined, null));
+        return gameImage;
+    }
     public void loadImageInfo(){
         nameToInfo.put(ImageInfo.IMAGE_NAME.SMALL_SWIM, new ImageInfo("smallswim.gif", 80,80,5,10));
         nameToInfo.put(ImageInfo.IMAGE_NAME.SMALL_EAT, new ImageInfo("smalleat.gif", 80,80,5,10));
@@ -82,6 +168,33 @@ public class ResourceManager {
         nameToInfo.put(ImageInfo.IMAGE_NAME.BREEDER, new ImageInfo("breeder.gif", 80, 80, 9, 10));
         nameToInfo.put(ImageInfo.IMAGE_NAME.BREEDER_HUNGRY, new ImageInfo("hungrybreeder.gif", 80, 80, 12, 10));
         nameToInfo.put(ImageInfo.IMAGE_NAME.ULTRAVORE, new ImageInfo("ultravore.gif", 160, 160, 4, 10));
+
+        nameToInfo.put(ImageInfo.IMAGE_NAME.ULTRAVORE_HUNGRY,
+                new ImageInfo(ImageInfo.IMAGE_NAME.ULTRAVORE, 160, 160, 4, 10,
+                1f, 1, 1, 1,  new int[]{0xFFC7E1EB, 0xFF7D96A2}, 0xFFD2CC2B));
+
+
+        nameToInfo.put(ImageInfo.IMAGE_NAME.SMALL_SWIM_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.SMALL_SWIM, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.SMALL_EAT_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.SMALL_EAT, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.SMALL_TURN_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.SMALL_TURN, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.SMALL_DIE_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.SMALL_DIE, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.HUNGRY_SWIM_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.HUNGRY_SWIM, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.HUNGRY_EAT_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.HUNGRY_EAT, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.HUNGRY_TURN_STAR,
+                new ImageInfo(ImageInfo.IMAGE_NAME.HUNGRY_TURN, 80,80,5,10,
+                        0.7f, 1.2, 1, 1,  null, 0));
 
     }
 }
