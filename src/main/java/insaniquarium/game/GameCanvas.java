@@ -73,7 +73,8 @@ public class GameCanvas extends Canvas {
             Entity click = new Entity();
             MovementComponent movementComponent = new MovementComponent((float) x, (float) y, 0, 0, 0, 0);
             TargetComponent targetComponent = new TargetComponent(ClickTypeComponent.CLICK_TYPE.CLICK.value,
-                    AlienTypeComponent.ALIEN_TYPE.ALIEN.value | CoinTypeComponent.COIN_TYPE.COLLECTABLE.value);
+                    AlienTypeComponent.ALIEN_TYPE.ALIEN.value | CoinTypeComponent.COIN_TYPE.COLLECTABLE.value |
+                            CoinTypeComponent.COIN_TYPE.BEETLE.value | CoinTypeComponent.COIN_TYPE.STAR.value | CoinTypeComponent.COIN_TYPE.PERL.value);
             HandleNoCollision handleNoCollision = new HandleNoCollision() {
                 @Override
                 public void handleNoCollision(Entity clickEntity, float x, float y) {

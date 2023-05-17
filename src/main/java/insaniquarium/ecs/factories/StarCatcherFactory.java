@@ -7,6 +7,7 @@ import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
+import insaniquarium.ecs.components.animationtypecomponents.IdlePosition;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
 import insaniquarium.ecs.components.behaviortypecomponents.FallBehavior;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
@@ -45,6 +46,8 @@ public class StarCatcherFactory extends Factory{
 
         starCatcher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, CoinTypeComponent.COIN_TYPE.STAR.value));
         starCatcher.addComponent(new BehaviorComponent(starCatcher, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, BehaviorComponent.BEHAVIOR_TYPE.IDLE, true));
+        starCatcher.addComponent(new IdlePosition(0,0));
+        starCatcher.addComponent(new FallSpeedComponent(100,0));
 
         starCatcher.addComponent(new HandleCollisionComponent() {
             @Override

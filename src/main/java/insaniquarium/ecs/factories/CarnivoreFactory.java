@@ -58,7 +58,7 @@ public class CarnivoreFactory extends Factory{
         int boundingCircleRadius = 40;
 
         carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
-        carnivore.addComponent(new IdlePosition(500,500));
+        carnivore.addComponent(new IdlePosition(0,0));
 
         carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
         carnivore.addComponent(new FallSpeedComponent(100,0));

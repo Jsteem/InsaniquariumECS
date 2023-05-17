@@ -73,7 +73,7 @@ public class GuppyFactory extends Factory {
 
         guppy.addComponent(new FallSpeedComponent(150,0));
 
-        guppy.addComponent(new IdlePosition(500 , 500));
+        guppy.addComponent(new IdlePosition(0 , 0));
 
         guppy.addComponent(new HandleCollisionComponent() {
             @Override
