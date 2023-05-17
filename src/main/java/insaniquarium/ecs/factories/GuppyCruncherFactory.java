@@ -46,7 +46,7 @@ public class GuppyCruncherFactory extends Factory{
 
 
         guppyCruncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
-        guppyCruncher.addComponent(new EatCollisionComponent(14,0, 0));
+
         guppyCruncher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));
 
         EntityManager.getInstance().addEntity(guppyCruncher);

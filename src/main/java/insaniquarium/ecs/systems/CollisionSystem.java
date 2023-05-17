@@ -35,17 +35,13 @@ public class CollisionSystem extends System {
                         CollisionObject match = target.searchNearest(movementComponent.x, movementComponent.y);
                         if (match != null) {
                             //check if we have an eat radius else treat it as a point
-                            EatCollisionComponent eatCollisionComponent = entity.getComponent(EatCollisionComponent.class);
+                            BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
                             int radius = 0;
                             float offsetX = movementComponent.x;
                             float offsetY = movementComponent.y;
 
-                            if (eatCollisionComponent != null) {
-                                //calculate the eat radius based on the velocity direction
-                                offsetX += (movementComponent.vx > 0 ? eatCollisionComponent.eatCollisionOffsetX : -eatCollisionComponent.eatCollisionOffsetX);
-                                offsetY += eatCollisionComponent.eatCollisionOffsetY;
-                                radius = eatCollisionComponent.eatCollisionRadius;
-
+                            if (boundingCollisionComponent != null) {
+                                radius = boundingCollisionComponent.boundingCollisionRadius;
 
                             }
                             float dx = offsetX - match.x;

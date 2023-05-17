@@ -78,22 +78,25 @@ public class GameCanvas extends Canvas {
                 @Override
                 public void handleNoCollision(Entity clickEntity, float x, float y) {
                     List<Entity> specialFoodEntities = gameData.getSpecialFoodEntities();
-                    Entity foodEntity;
+                    Entity foodEntity = null;
                     if (!specialFoodEntities.isEmpty()) {
                         foodEntity = specialFoodEntities.get(0);
                         MovementComponent movementComponent = foodEntity.getComponent(MovementComponent.class);
                         movementComponent.x = x;
                         movementComponent.y = y;
                         specialFoodEntities.remove(0);
-                        EntityManager.getInstance().addEntity(foodEntity);
                     } else if (gameData.subtractFromTotalAmountOfMoney(5)) {
+                        foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int) x, (int) y, gameData.getTierFood());
 
-                        int tierFood = gameData.getTierFood();
-                        foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int) x, (int) y, tierFood);
-                        EntityManager.getInstance().addEntity(foodEntity);
+                        //DEBUG - spawn a star:
+                        //foodEntity = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) x, (int) y,2);
+
+                        //DEBUG - spawn a beetle:
+                        //foodEntity = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) x, (int) y,5);
+
 
                     }
-
+                    EntityManager.getInstance().addEntity(foodEntity);
                 }
             };
             click.addComponent(new HandleCollisionComponent() {
@@ -106,15 +109,15 @@ public class GameCanvas extends Canvas {
                         int level = growthComponent.growthLevel;
                         switch (level) {
                             case 0 -> {
-                                money = 10;
-                                //SoundManager.getInstance().playSound("POINTS.ogg");
-                            }
-                            case 1 -> {
                                 money = 15;
                                 //SoundManager.getInstance().playSound("POINTS.ogg");
                             }
+                            case 1 -> {
+                                money = 25;
+                                //SoundManager.getInstance().playSound("POINTS.ogg");
+                            }
                             case 2 -> {
-                                money = 20;
+                                money = 40;
                                 //SoundManager.getInstance().playSound("POINTS.ogg");
                             }
                             case 3 -> {

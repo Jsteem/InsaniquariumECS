@@ -84,13 +84,7 @@ public class RenderSystem extends System {
                                 new CircleShape(2, Color.YELLOW, boundingCollisionComponent.boundingCollisionRadius, movementComponent.x, movementComponent.y));
                     }
 
-                    EatCollisionComponent eatCollisionComponent = entity.getComponent(EatCollisionComponent.class);
-                    if (eatCollisionComponent != null && movementComponent != null) {
-                        float offsetY = movementComponent.y + eatCollisionComponent.eatCollisionOffsetY;
-                        float offsetX = movementComponent.x + (movementComponent.vx > 0 ? eatCollisionComponent.eatCollisionOffsetX : -eatCollisionComponent.eatCollisionOffsetX);
-                        RenderManager.getInstance().submitDrawRequest(
-                                new CircleShape(2, Color.GREEN, eatCollisionComponent.eatCollisionRadius, offsetX, offsetY));
-                    }
+
 
                 }
                 if (textComponent != null) {

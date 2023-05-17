@@ -43,7 +43,7 @@ public class UltravoreFactory extends Factory{
 
 
         ultravore.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
-        ultravore.addComponent(new EatCollisionComponent(14,0, 0));
+
         ultravore.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FishTypeComponent.FISH_TYPE.CARNIVORE.value));
 
         EntityManager.getInstance().addEntity(ultravore);

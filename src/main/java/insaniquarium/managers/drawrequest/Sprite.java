@@ -29,7 +29,7 @@ public class Sprite extends DrawRequest {
         this.row = row;
         this.column = column;
         this.image = ResourceManager.getInstance().getImage(name);
-        this.imageInfo = this.image.getImageInfo();
+        this.imageInfo = ResourceManager.getInstance().getImageInfo(name);
         this.reversed = reversed;
         this.scale = scale;
     }

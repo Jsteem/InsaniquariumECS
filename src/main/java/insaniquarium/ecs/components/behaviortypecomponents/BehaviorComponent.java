@@ -24,7 +24,7 @@ public class BehaviorComponent extends Component {
 
     private Entity entity;
     public enum BEHAVIOR_TYPE{
-        IDLE, SEEK, EAT, FALL_DOWN
+        IDLE, SEEK, EAT, JUMP, FALL_DOWN
     }
     public void update(double delta){
         if(currentBehavior != null){
@@ -48,11 +48,11 @@ public class BehaviorComponent extends Component {
     }
     public static void initComponents(){
         behaviorToComponent = new HashMap<>();
-        behaviorToComponent.put(BEHAVIOR_TYPE.IDLE, new IdleBehavior(3000));
-        behaviorToComponent.put(BEHAVIOR_TYPE.SEEK, new SeekBehavior(5000));
+        behaviorToComponent.put(BEHAVIOR_TYPE.IDLE, new IdleBehavior(2000));
+        behaviorToComponent.put(BEHAVIOR_TYPE.SEEK, new SeekBehavior(6000));
         behaviorToComponent.put(BEHAVIOR_TYPE.FALL_DOWN, new FallBehavior(0));
         behaviorToComponent.put(BEHAVIOR_TYPE.EAT, new EatBehavior(0));
-
+        behaviorToComponent.put(BEHAVIOR_TYPE.JUMP, new JumpBehavior(0));
     }
     public BehaviorTypeComponent getBehaviorTypeComponent(BEHAVIOR_TYPE behaviorType){
         if(behaviorToComponent != null){

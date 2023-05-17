@@ -28,7 +28,7 @@ public class FoodFactory extends Factory{
 
         int boundingCircleRadius = 15;
 
-        food.addComponent(new MovementComponent(x, y, 0, 20, 0, 0));
+        food.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
 
         food.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
 
@@ -36,7 +36,9 @@ public class FoodFactory extends Factory{
 
         food.addComponent(new BehaviorComponent(food, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, null));
 
+        food.addComponent(new GrowthComponent(level));
 
+        food.addComponent(new FallSpeedComponent(75,0));
 
         return food;
     }

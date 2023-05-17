@@ -2,10 +2,7 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.components.BoundingCollisionComponent;
-import insaniquarium.ecs.components.GrowthComponent;
-import insaniquarium.ecs.components.MovementComponent;
-import insaniquarium.ecs.components.TargetComponent;
+import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
@@ -31,13 +28,24 @@ public class CoinFactory extends Factory{
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
         coin.addComponent(animationComponent);
 
-        int boundingCircleRadius = 15;
+        int boundingCircleRadius = 20;
 
-        coin.addComponent(new MovementComponent(x, y, 0, 20, 0, 0));
+        coin.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
 
         coin.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
 
-        coin.addComponent(new TargetComponent(CoinTypeComponent.COIN_TYPE.COLLECTABLE.value, ClickTypeComponent.CLICK_TYPE.CLICK.value));
+        coin.addComponent(new FallSpeedComponent(100,0));
+
+        if(level == 2){
+            coin.addComponent(new TargetComponent(CoinTypeComponent.COIN_TYPE.STAR.value, ClickTypeComponent.CLICK_TYPE.CLICK.value));
+        }
+        else if(level == 5){
+            coin.addComponent(new TargetComponent(CoinTypeComponent.COIN_TYPE.BEETLE.value, ClickTypeComponent.CLICK_TYPE.CLICK.value));
+        }
+        else{
+            coin.addComponent(new TargetComponent(CoinTypeComponent.COIN_TYPE.COLLECTABLE.value, ClickTypeComponent.CLICK_TYPE.CLICK.value));
+        }
+
 
         coin.addComponent(new BehaviorComponent(coin, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, null));
 

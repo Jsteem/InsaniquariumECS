@@ -49,8 +49,10 @@ public class SeekBehavior extends BehaviorTypeComponent {
 
             if (target != null) {
                 final double DESIRED_SPEED = 80;
-                final double CURVE_FACTOR = 0.10;
-                final double ARRIVAL_RADIUS = 5.0;
+
+                final double CURVE_FACTOR = -0.3;
+                final double ARRIVAL_RADIUS = 10.0;
+
                 double dx = target.x - movementComponent.x;
                 double dy = target.y - movementComponent.y;
 
@@ -58,27 +60,31 @@ public class SeekBehavior extends BehaviorTypeComponent {
                 double directionX = dx / directionLength;
                 double directionY = dy / directionLength;
 
-                // Calculate desired velocity
+
                 double distanceFactor = Math.max(0.0, Math.min(1.0, directionLength / ARRIVAL_RADIUS));
                 double desiredSpeed = distanceFactor * DESIRED_SPEED;
                 double desiredVelocityX = directionX * desiredSpeed;
                 double desiredVelocityY = directionY * desiredSpeed;
 
-                // Calculate steering force
                 double perpendicularX = -dy;
                 double perpendicularY = dx;
                 double steeringForceX = perpendicularX * CURVE_FACTOR;
                 double steeringForceY = perpendicularY * CURVE_FACTOR;
 
-                // Add steering force to desired velocity
+
                 finalVelocityX = desiredVelocityX + steeringForceX;
                 finalVelocityY = desiredVelocityY + steeringForceY;
+
+
+                double seekOffset = 30;
+                finalVelocityY += seekOffset;
 
 
             } else {
                 finalVelocityX *= 0.99;
                 finalVelocityY *= 0.99;
             }
+
             if (movementComponent.vx * finalVelocityX < 0
                     && (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN ||
                     animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)) {
@@ -103,7 +109,7 @@ public class SeekBehavior extends BehaviorTypeComponent {
             }
 
             movementComponent.vx = (float) finalVelocityX;
-            if(!component.boundToGround){
+            if (!component.boundToGround) {
                 movementComponent.vy = (float) finalVelocityY;
             }
 

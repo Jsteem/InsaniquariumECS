@@ -26,7 +26,7 @@ public class MovementSystem extends System {
                     movementComponent.x += movementComponent.vx * delta;
                     movementComponent.y += movementComponent.vy * delta;
                     movementComponent.vx += movementComponent.ax * delta;
-                    movementComponent.ay += movementComponent.ay * delta;
+                    movementComponent.vy += movementComponent.ay * delta;
 
                     int radius = 0;
                     BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);

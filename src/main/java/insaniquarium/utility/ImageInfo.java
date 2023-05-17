@@ -2,6 +2,8 @@ package insaniquarium.utility;
 
 public class ImageInfo {
 
+
+
     public enum IMAGE_NAME{
         SMALL_SWIM,
         SMALL_TURN,
@@ -49,8 +51,6 @@ public class ImageInfo {
     public double blueFactor;
     public int[] replaceColors;
     public int replaceColor;
-    public IMAGE_NAME imageName;
-
 
     public ImageInfo(String fileName, int cellWidth, int cellHeight, int numRows, int numCols){
         this.fileName = fileName;
@@ -60,14 +60,13 @@ public class ImageInfo {
         this.numCols = numCols;
     }
 
-    public ImageInfo(IMAGE_NAME imageName, int cellWidth, int cellHeight, int numRows, int numCols,
-                     float transparency, double greenFactor, double redFactor, double blueFactor,
+    public ImageInfo(ImageInfo imageInfo, float transparency, double greenFactor, double redFactor, double blueFactor,
                      int[] replaceColors, int replaceColor){
-        this.imageName = imageName;
-        this.cellWidth = cellWidth;
-        this.cellHeight = cellHeight;
-        this.numRows = numRows;
-        this.numCols = numCols;
+        this.fileName = imageInfo.fileName;
+        this.cellWidth = imageInfo.cellWidth;
+        this.cellHeight = imageInfo.cellHeight;
+        this.numRows = imageInfo.numRows;
+        this.numCols = imageInfo.numCols;
         this.transparency = transparency;
         this.greenFactor = greenFactor;
         this.redFactor = redFactor;
@@ -76,3 +75,4 @@ public class ImageInfo {
         this.replaceColors = replaceColors;
     }
 }
+

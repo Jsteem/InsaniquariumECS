@@ -55,7 +55,7 @@ public class BreederFactory extends Factory{
 
 
         breeder.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
-        breeder.addComponent(new EatCollisionComponent(14,0, 0));
+
         breeder.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
 
         EntityManager.getInstance().addEntity(breeder);

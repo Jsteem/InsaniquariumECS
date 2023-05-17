@@ -4,6 +4,7 @@ import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.BoundingCollisionComponent;
+import insaniquarium.ecs.components.FallSpeedComponent;
 import insaniquarium.ecs.components.MovementComponent;
 
 public class FallBehavior extends BehaviorTypeComponent {
@@ -18,18 +19,18 @@ public class FallBehavior extends BehaviorTypeComponent {
         component.passedTimeMs = 0;
         component.triggerNextBehaviorTimeMs = 0;
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
-        movementComponent.vy = 100;
-        movementComponent.vx *= 0.1;
     }
 
     @Override
     public void onUpdate(Entity entity, BehaviorComponent component, double delta) {
+
         if(component.passedTimeMs == 0){
             onEnter(entity, component);
         }
-
+        FallSpeedComponent fallSpeedComponent = entity.getComponent(FallSpeedComponent.class);
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
-        if (movementComponent != null && component.triggerNextBehaviorTimeMs == 0) {
+
+        if (movementComponent != null && fallSpeedComponent != null & component.triggerNextBehaviorTimeMs == 0) {
             int radius = 0;
             BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
             if (boundingCollisionComponent != null) {
@@ -39,6 +40,9 @@ public class FallBehavior extends BehaviorTypeComponent {
             if (movementComponent.y >= Main.HEIGHT - Main.GROUND_OFFSET_HEIGHT - radius) {
                 component.triggerNextBehaviorTimeMs = component.passedTimeMs + GROUND_TIME_MS;
             }
+
+            movementComponent.vy = fallSpeedComponent.vy;
+            movementComponent.ay = fallSpeedComponent.ay;
         }
 
         if (component.triggerNextBehaviorTimeMs != 0 && component.passedTimeMs > component.triggerNextBehaviorTimeMs) {

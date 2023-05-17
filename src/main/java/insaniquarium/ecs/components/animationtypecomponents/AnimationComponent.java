@@ -30,15 +30,21 @@ public class AnimationComponent extends Component {
         activeType = types.get(AnimationType.IDLE);
     }
     public void setActiveType(AnimationType animationType){
-        animationComplete = false;
-        frameNr = 0;
-        update = true;
-        activeType = types.get(animationType);
+        if (types.get(animationType) != null) {
+            animationComplete = false;
+            frameNr = 0;
+            update = true;
+            activeType = types.get(animationType);
+        }
+
     }
     public void setActiveTypeSmooth(AnimationType animationType) {
-        animationComplete = false;
-        update = true;
-        activeType = types.get(animationType);
+        if (types.get(animationType) != null) {
+            animationComplete = false;
+            update = true;
+            activeType = types.get(animationType);
+        }
+
     }
 
 

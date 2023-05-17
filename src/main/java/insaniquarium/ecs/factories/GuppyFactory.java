@@ -17,8 +17,8 @@ import java.util.HashMap;
 
 public class GuppyFactory extends Factory {
     int[] boundingCircleRadius = {20, 25, 30, 30};
-    int[] eatCircleOffset = {12, 16, 25, 25};
-    int[] eatCircleRadius = {10, 16, 18, 18};
+
+
     public GuppyFactory() {
 
     }
@@ -34,11 +34,11 @@ public class GuppyFactory extends Factory {
 
         animationComponents.put(
                 AnimationComponent.AnimationType.TURN,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN, AnimationComponent.AnimationType.TURN, level, 0.05, false, 1));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN, AnimationComponent.AnimationType.TURN, level, 0.07, false, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.EAT,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT, AnimationComponent.AnimationType.EAT, level, 0.07, false, 1));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT, AnimationComponent.AnimationType.EAT, level, 0.04, false, 1));
 
         animationComponents.put(
                 AnimationComponent.AnimationType.DIE,
@@ -54,7 +54,7 @@ public class GuppyFactory extends Factory {
 
         animationComponents.put(
                 AnimationComponent.AnimationType.HUNGRY_EAT,
-                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT, AnimationComponent.AnimationType.HUNGRY_EAT, level, 0.07, false, 1));
+                new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT, AnimationComponent.AnimationType.HUNGRY_EAT, level, 0.04, false, 1));
 
 
         AnimationComponent animationComponent = new AnimationComponent(animationComponents);
@@ -64,51 +64,41 @@ public class GuppyFactory extends Factory {
         guppy.addComponent(behaviorComponent);
 
 
-
-        guppy.addComponent(new MovementComponent(x, y, 30, 0, 0, 0));
+        guppy.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
         guppy.addComponent(new GrowthComponent(level));
 
         guppy.addComponent(new BoundingCollisionComponent(boundingCircleRadius[0]));
-        guppy.addComponent(new EatCollisionComponent(eatCircleRadius[0], eatCircleOffset[0], 0));
+
         guppy.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
+
+        guppy.addComponent(new FallSpeedComponent(150,0));
+
+        guppy.addComponent(new IdlePosition(500 , 500));
 
         guppy.addComponent(new HandleCollisionComponent() {
             @Override
-            public void handleCollision(Entity entity, Entity target, long mask) {
-                BehaviorComponent behaviorComponent = entity.getComponent(BehaviorComponent.class);
-                AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-                GrowthComponent growthComponent = entity.getComponent(GrowthComponent.class);
-                MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
+            public void handleCollision(Entity guppy, Entity food, long mask) {
+                BehaviorComponent behaviorComponent = guppy.getComponent(BehaviorComponent.class);
+                AnimationComponent animationComponent = guppy.getComponent(AnimationComponent.class);
+                GrowthComponent growthComponent = guppy.getComponent(GrowthComponent.class);
+
                 if (behaviorComponent != null && animationComponent != null && growthComponent != null) {
                     if (animationComponent.animationComplete ||
                             (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN &&
                                     animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)
                     )
                         if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
-                            behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
-                            behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
-                            behaviorComponent.currentBehavior.onEnter(entity, behaviorComponent);
-                            EntityManager.getInstance().removeEntity(target);
 
-                            if(growthComponent.growthLevel < 3){
+                            GrowthComponent growthComponentFood = food.getComponent(GrowthComponent.class);
 
-                                growthComponent.growthLevel++;
-                                EatCollisionComponent eatCollisionComponent = entity.getComponent(EatCollisionComponent.class);
-                                eatCollisionComponent.eatCollisionOffsetX = eatCircleOffset[growthComponent.growthLevel];
-                                eatCollisionComponent.eatCollisionRadius = eatCircleRadius[growthComponent.growthLevel];
-                                BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
-                                boundingCollisionComponent.boundingCollisionRadius = boundingCircleRadius[growthComponent.growthLevel];
-                                TargetComponent targetComponent = entity.getComponent(TargetComponent.class);
-                                targetComponent.maskEntity = FishTypeComponent.FISH_TYPE.FISH.value;
-                                SpawnComponent spawnComponent = entity.getComponent(SpawnComponent.class);
-                                if(spawnComponent == null){
-                                    spawnComponent = new SpawnComponent(entity,
-                                            FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 1000, 0);
-                                    entity.addComponent(spawnComponent);
-                                }
-                                spawnComponent.level = growthComponent.growthLevel < 3 ?  growthComponent.growthLevel -1 : 3;
-
+                            //growth levels of food: pellet 0, canned 1, pill 2, potion 3
+                            if (growthComponentFood.growthLevel == 3) {
+                                handlePotion(guppy, behaviorComponent);
+                            } else {
+                                handleFood(guppy, behaviorComponent);
                             }
+
+                            EntityManager.getInstance().removeEntity(food);
                         }
                 }
             }
@@ -133,6 +123,89 @@ public class GuppyFactory extends Factory {
     }
 
 
+    public void handleFood(Entity guppy, BehaviorComponent behaviorComponent) {
+        behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
+        behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
+        behaviorComponent.currentBehavior.onEnter(guppy, behaviorComponent);
+        GrowthComponent growthComponent = guppy.getComponent(GrowthComponent.class);
+        if (growthComponent.growthLevel < 3) {
+            SpawnComponent spawnComponent = guppy.getComponent(SpawnComponent.class);
+            if (spawnComponent != null && spawnComponent.level == 2) {
+                //star dropping guppies get unaffected
+                return;
+            }
+            growthComponent.growthLevel++;
+            BoundingCollisionComponent boundingCollisionComponent = guppy.getComponent(BoundingCollisionComponent.class);
+            boundingCollisionComponent.boundingCollisionRadius = boundingCircleRadius[growthComponent.growthLevel];
+            TargetComponent targetComponent = guppy.getComponent(TargetComponent.class);
+            targetComponent.maskEntity = FishTypeComponent.FISH_TYPE.FISH.value;
+
+            if (spawnComponent == null) {
+                spawnComponent = new SpawnComponent(guppy,
+                        FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 8000, 0);
+                guppy.addComponent(spawnComponent);
+            }
+            spawnComponent.level = growthComponent.growthLevel < 3 ? growthComponent.growthLevel - 1 : 3;
+
+        }
+    }
+    public void handlePotion(Entity guppy, BehaviorComponent behaviorComponent) {
+        if (behaviorComponent.currentBehavior != behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN)) {
+            GrowthComponent growthComponent = guppy.getComponent(GrowthComponent.class);
+            AnimationComponent animationComponent = guppy.getComponent(AnimationComponent.class);
+            if (growthComponent.growthLevel < 2) {
+                //small and medium guppy die
+
+                behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
+                behaviorComponent.nextBehavior = null;
+                behaviorComponent.currentBehavior.onEnter(guppy, behaviorComponent);
+                animationComponent.setActiveType(AnimationComponent.AnimationType.DIE);
+
+            } else if (growthComponent.growthLevel < 3) {
+                //large gets star type, king gets unaffected
+                if( guppy.getComponent(SpawnComponent.class).level == 2) {
+                    return;
+                }
+                guppy.getComponent(SpawnComponent.class).level = 2;
+
+
+                guppy.removeComponent(AnimationComponent.class);
+                HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
+                animationComponents.put(
+                        AnimationComponent.AnimationType.IDLE,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM_STAR, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
+
+                animationComponents.put(
+                        AnimationComponent.AnimationType.TURN,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN_STAR, AnimationComponent.AnimationType.TURN, 0, 0.04, false, 1));
+
+                animationComponents.put(
+                        AnimationComponent.AnimationType.EAT,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT_STAR, AnimationComponent.AnimationType.EAT, 0, 0.04, false, 1));
+
+                animationComponents.put(
+                        AnimationComponent.AnimationType.DIE,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_DIE_STAR, AnimationComponent.AnimationType.DIE, 0, 0.07, false, 1));
+
+                animationComponents.put(
+                        AnimationComponent.AnimationType.HUNGRY_IDLE,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_SWIM_STAR, AnimationComponent.AnimationType.HUNGRY_IDLE, 0, 0.07, true, 1));
+
+                animationComponents.put(
+                        AnimationComponent.AnimationType.HUNGRY_TURN,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_TURN_STAR, AnimationComponent.AnimationType.HUNGRY_TURN, 0, 0.04, false, 1));
+
+                animationComponents.put(
+                        AnimationComponent.AnimationType.HUNGRY_EAT,
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT_STAR, AnimationComponent.AnimationType.HUNGRY_EAT, 0, 0.04, false, 1));
+                guppy.addComponent(new AnimationComponent(animationComponents));
+
+
+
+
+            }
+        }
+    }
 }
 
 

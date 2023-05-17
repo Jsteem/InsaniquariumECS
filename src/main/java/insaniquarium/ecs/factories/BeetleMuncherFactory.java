@@ -2,10 +2,13 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
+import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
+import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.utility.ImageInfo;
@@ -52,12 +55,40 @@ public class BeetleMuncherFactory extends Factory{
 
         int boundingCircleRadius = 40;
 
-        beetleMuncher.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        beetleMuncher.addComponent(new MovementComponent(x, y, -1, 0, 0, 0));
 
 
         beetleMuncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
-        beetleMuncher.addComponent(new EatCollisionComponent(14,0, 0));
+
         beetleMuncher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, CoinTypeComponent.COIN_TYPE.BEETLE.value));
+        BehaviorComponent behaviorComponent = new BehaviorComponent(beetleMuncher, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK);
+        beetleMuncher.addComponent(behaviorComponent);
+
+        beetleMuncher.addComponent(new SpawnComponent(beetleMuncher,
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 5000, 0));
+
+        beetleMuncher.addComponent(new HandleCollisionComponent() {
+            @Override
+            public void handleCollision(Entity beetleMuncher, Entity beetle, long mask) {
+                BehaviorComponent behaviorComponent = beetleMuncher.getComponent(BehaviorComponent.class);
+                AnimationComponent animationComponent = beetleMuncher.getComponent(AnimationComponent.class);
+
+                if (behaviorComponent != null && animationComponent != null) {
+                    if (animationComponent.animationComplete ||
+                            (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN &&
+                                    animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)
+                    )
+                        if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
+                            behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
+                            behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
+                            behaviorComponent.currentBehavior.onEnter(beetleMuncher, behaviorComponent);
+
+                            EntityManager.getInstance().removeEntity(beetle);
+                        }
+                }
+            }
+        });
+
 
         EntityManager.getInstance().addEntity(beetleMuncher);
         return beetleMuncher;

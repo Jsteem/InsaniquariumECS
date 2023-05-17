@@ -57,11 +57,12 @@ public class CarnivoreFactory extends Factory{
 
         int boundingCircleRadius = 40;
 
-        carnivore.addComponent(new MovementComponent(x, y, 10, 0, 0, 0));
-
+        carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
+        carnivore.addComponent(new IdlePosition(500,500));
 
         carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
-        carnivore.addComponent(new EatCollisionComponent(14,20, 0));
+        carnivore.addComponent(new FallSpeedComponent(100,0));
+
         carnivore.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.CARNIVORE.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));
         carnivore.addComponent(new BehaviorComponent(carnivore, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK));
         carnivore.addComponent(new HandleCollisionComponent() {
@@ -88,7 +89,7 @@ public class CarnivoreFactory extends Factory{
         });
 
         SpawnComponent spawnComponent = new SpawnComponent(carnivore,
-                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 1000, 3);
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 7000, 3);
         carnivore.addComponent(spawnComponent);
 
         EntityManager.getInstance().addEntity(carnivore);
