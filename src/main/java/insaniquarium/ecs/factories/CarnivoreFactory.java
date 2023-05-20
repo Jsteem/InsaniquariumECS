@@ -60,7 +60,8 @@ public class CarnivoreFactory extends Factory{
         carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
         carnivore.addComponent(new IdlePosition(0,0));
 
-        carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
+        carnivore.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
+        carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
         carnivore.addComponent(new FallSpeedComponent(100,0));
 
         carnivore.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.CARNIVORE.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));

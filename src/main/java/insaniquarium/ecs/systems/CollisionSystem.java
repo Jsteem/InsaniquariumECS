@@ -33,22 +33,21 @@ public class CollisionSystem extends System {
                     KDTree target = objectTypeToKDTree.get(targetComponent.maskEntityTarget);
                     if (target != null && movementComponent != null) {
                         CollisionObject match = target.searchNearest(movementComponent.x, movementComponent.y);
-                        if (match != null) {
-                            //check if we have an eat radius else treat it as a point
-                            BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
-                            int radius = 0;
-                            float offsetX = movementComponent.x;
-                            float offsetY = movementComponent.y;
+                        BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
+                        if (match != null && boundingCollisionComponent != null) {
 
-                            if (boundingCollisionComponent != null) {
-                                radius = boundingCollisionComponent.boundingCollisionRadius;
+                            int left1 = (int) movementComponent.x - boundingCollisionComponent.boundingCollisionWidth / 2;
+                            int right1 = (int) movementComponent.x + boundingCollisionComponent.boundingCollisionWidth / 2;
+                            int top1 = (int) movementComponent.y - boundingCollisionComponent.boundingCollisionHeight / 2;
+                            int bottom1 = (int) movementComponent.y + boundingCollisionComponent.boundingCollisionHeight / 2;
 
-                            }
-                            float dx = offsetX - match.x;
-                            float dy = offsetY - match.y;
-                            double distance = Math.sqrt(dx * dx + dy * dy);
-                            double sumRadius = radius + match.radius;
-                            if (distance < sumRadius) {
+                            int left2 = (int) match.x - match.width / 2;
+                            int right2 =(int) match.x + match.width / 2;
+                            int top2 =(int) match.y - match.height / 2;
+                            int bottom2 =(int) match.y + match.height / 2;
+
+
+                            if (right1 >= left2 && left1 <= right2 && bottom1 >= top2 && top1 <= bottom2) {
                                 collisionFound = true;
                                 //java.lang.System.out.println("Collision found between entity : " + entity.id + "and target: " + match.entity.id);
 

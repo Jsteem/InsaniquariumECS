@@ -9,7 +9,7 @@ public class CoinTypeComponent extends Component {
         COIN_GOLD(0),
         DIAMOND(0),
         STAR(1 << 4),
-        PERL( 1 << 5),
+        PEARL( 0),
         CHEST(0),
         BEETLE(1 << 6);
         public  final long value;

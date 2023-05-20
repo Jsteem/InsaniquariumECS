@@ -9,7 +9,6 @@ import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeCompone
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
 import insaniquarium.ecs.components.animationtypecomponents.IdlePosition;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
-import insaniquarium.ecs.components.behaviortypecomponents.FallBehavior;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
@@ -42,7 +41,8 @@ public class StarCatcherFactory extends Factory{
         int boundingCircleRadius = 40;
 
         starCatcher.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
-        starCatcher.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
+        starCatcher.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
+        starCatcher.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
 
         starCatcher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, CoinTypeComponent.COIN_TYPE.STAR.value));
         starCatcher.addComponent(new BehaviorComponent(starCatcher, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, BehaviorComponent.BEHAVIOR_TYPE.IDLE, true));
@@ -62,13 +62,22 @@ public class StarCatcherFactory extends Factory{
                             behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
                             behaviorComponent.currentBehavior.onEnter(starCatcher, behaviorComponent);
 
-                            Entity diamond = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) movementComponent.x, (int) movementComponent.y, 3 );
-                            diamond.removeComponent(BehaviorComponent.class);
-                            BehaviorComponent behaviorComponentDiamond = new BehaviorComponent(diamond, BehaviorComponent.BEHAVIOR_TYPE.JUMP, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
-                            diamond.addComponent(behaviorComponentDiamond);
 
-                            EntityManager.getInstance().addEntity(diamond);
-                            EntityManager.getInstance().removeEntity(star);
+                            GrowthComponent growthComponentFood = star.getComponent(GrowthComponent.class);
+
+                            if(growthComponentFood != null){
+
+                                Entity diamond = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) movementComponent.x, (int) movementComponent.y, 3 );
+                                diamond.removeComponent(BehaviorComponent.class);
+                                BehaviorComponent behaviorComponentDiamond = new BehaviorComponent(diamond, BehaviorComponent.BEHAVIOR_TYPE.JUMP, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
+                                diamond.addComponent(behaviorComponentDiamond);
+
+                                EntityManager.getInstance().addEntity(diamond);
+
+                                star.removeComponent(GrowthComponent.class);
+                                EntityManager.getInstance().removeEntity(star);
+                            }
+
                         }
                 }
             }

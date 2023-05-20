@@ -1,12 +1,9 @@
 package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
-import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.*;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
-import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
-import insaniquarium.ecs.components.handlecollisioncomponents.HandleNoCollision;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
@@ -30,7 +27,9 @@ public class FoodFactory extends Factory{
 
         food.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
 
-        food.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
+        food.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
+
+        food.addComponent(new BoundingCollisionComponent(boundingCircleRadius * 2, boundingCircleRadius * 2));
 
         food.addComponent(new TargetComponent(FoodTypeComponent.FOOD_TYPE.FOOD.value, 0));
 

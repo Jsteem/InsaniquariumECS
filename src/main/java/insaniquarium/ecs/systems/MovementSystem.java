@@ -3,7 +3,7 @@ package insaniquarium.ecs.systems;
 import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.components.BoundingCollisionComponent;
+import insaniquarium.ecs.components.BoundingRadiusComponent;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.TargetComponent;
 
@@ -29,9 +29,9 @@ public class MovementSystem extends System {
                     movementComponent.vy += movementComponent.ay * delta;
 
                     int radius = 0;
-                    BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
-                    if (boundingCollisionComponent != null) {
-                        radius = boundingCollisionComponent.boundingCollisionRadius;
+                    BoundingRadiusComponent boundingRadiusComponent = entity.getComponent(BoundingRadiusComponent.class);
+                    if (boundingRadiusComponent != null) {
+                        radius = boundingRadiusComponent.boundingCollisionRadius;
                     }
 
                     int minWidth = Main.SIDE_OFFSET + radius;

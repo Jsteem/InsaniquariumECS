@@ -2,10 +2,14 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
+import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
+import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
+import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.utility.ImageInfo;
 
@@ -45,10 +49,46 @@ public class GuppyCruncherFactory extends Factory{
         guppyCruncher.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
 
 
-        guppyCruncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
+        guppyCruncher.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
 
         guppyCruncher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));
+        guppyCruncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius, 600));
+        guppyCruncher.addComponent(new BehaviorComponent(guppyCruncher, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK, true));
+        guppyCruncher.addComponent(new FallSpeedComponent(100,0));
+        guppyCruncher.addComponent(new HandleCollisionComponent() {
+            @Override
+            public void handleCollision(Entity guppyCruncher, Entity guppy, long mask) {
+                BehaviorComponent behaviorComponent = guppyCruncher.getComponent(BehaviorComponent.class);
+                AnimationComponent animationComponent = guppyCruncher.getComponent(AnimationComponent.class);
+                MovementComponent movementComponent  = guppyCruncher.getComponent(MovementComponent.class);
+                if (behaviorComponent != null && animationComponent != null) {
 
+                    if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
+
+
+                        behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
+                        behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
+                        behaviorComponent.currentBehavior.onEnter(guppyCruncher, behaviorComponent);
+
+                        GrowthComponent growthComponentFood = guppy.getComponent(GrowthComponent.class);
+
+                        if(growthComponentFood != null){
+
+                            Entity beetle = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) movementComponent.x, (int) movementComponent.y, 5 );
+                            beetle.removeComponent(BehaviorComponent.class);
+                            BehaviorComponent behaviorComponentDiamond = new BehaviorComponent(beetle, BehaviorComponent.BEHAVIOR_TYPE.JUMP, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
+                            beetle.addComponent(behaviorComponentDiamond);
+                            EntityManager.getInstance().addEntity(beetle);
+
+                            guppy.removeComponent(GrowthComponent.class);
+                            EntityManager.getInstance().removeEntity(guppy);
+                        }
+
+
+                    }
+                }
+            }
+        });
         EntityManager.getInstance().addEntity(guppyCruncher);
         return guppyCruncher;
 

@@ -74,7 +74,9 @@ public class GameCanvas extends Canvas {
             MovementComponent movementComponent = new MovementComponent((float) x, (float) y, 0, 0, 0, 0);
             TargetComponent targetComponent = new TargetComponent(ClickTypeComponent.CLICK_TYPE.CLICK.value,
                     AlienTypeComponent.ALIEN_TYPE.ALIEN.value | CoinTypeComponent.COIN_TYPE.COLLECTABLE.value |
-                            CoinTypeComponent.COIN_TYPE.BEETLE.value | CoinTypeComponent.COIN_TYPE.STAR.value | CoinTypeComponent.COIN_TYPE.PERL.value);
+                            CoinTypeComponent.COIN_TYPE.BEETLE.value | CoinTypeComponent.COIN_TYPE.STAR.value);
+
+
             HandleNoCollision handleNoCollision = new HandleNoCollision() {
                 @Override
                 public void handleNoCollision(Entity clickEntity, float x, float y) {
@@ -104,37 +106,9 @@ public class GameCanvas extends Canvas {
                 @Override
                 public void handleCollision(Entity entity, Entity target, long mask) {
 
-                    GrowthComponent growthComponent = target.getComponent(GrowthComponent.class);
-                    if(growthComponent != null){
-                        int money = 0;
-                        int level = growthComponent.growthLevel;
-                        switch (level) {
-                            case 0 -> {
-                                money = 15;
-                                //SoundManager.getInstance().playSound("POINTS.ogg");
-                            }
-                            case 1 -> {
-                                money = 25;
-                                //SoundManager.getInstance().playSound("POINTS.ogg");
-                            }
-                            case 2 -> {
-                                money = 40;
-                                //SoundManager.getInstance().playSound("POINTS.ogg");
-                            }
-                            case 3 -> {
-                                money = 200;
-                                //SoundManager.getInstance().playSound("diamond.ogg");
-                            }
-                            case 4 -> {
-                                money = 2000;
-                                //SoundManager.getInstance().playSound("TREASURE.ogg");
-                            }
-                            case 5 -> {
-                                money = 30;
-                                //SoundManager.getInstance().playSound("POINTS.ogg");
-                            }
-                        }
-                        gameData.addToTotalAmountOfMoney(money);
+                    MoneyValueComponent moneyValueComponent = target.getComponent(MoneyValueComponent.class);
+                    if(moneyValueComponent != null){
+                        gameData.addToTotalAmountOfMoney(moneyValueComponent.moneyValue);
                     }
                     EntityManager.getInstance().removeEntity(target);
                 }
@@ -142,6 +116,7 @@ public class GameCanvas extends Canvas {
             click.addComponent(handleNoCollision);
             click.addComponent(targetComponent);
             click.addComponent(movementComponent);
+            click.addComponent(new BoundingCollisionComponent(3, 3));
             EntityManager.getInstance().addEntity(click);
         }
     }

@@ -67,7 +67,9 @@ public class GuppyFactory extends Factory {
         guppy.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
         guppy.addComponent(new GrowthComponent(level));
 
-        guppy.addComponent(new BoundingCollisionComponent(boundingCircleRadius[0]));
+        guppy.addComponent(new BoundingRadiusComponent(boundingCircleRadius[0]));
+
+        guppy.addComponent(new BoundingCollisionComponent(boundingCircleRadius[0] * 2, boundingCircleRadius[0] * 2));
 
         guppy.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
 
@@ -91,14 +93,17 @@ public class GuppyFactory extends Factory {
 
                             GrowthComponent growthComponentFood = food.getComponent(GrowthComponent.class);
 
-                            //growth levels of food: pellet 0, canned 1, pill 2, potion 3
-                            if (growthComponentFood.growthLevel == 3) {
-                                handlePotion(guppy, behaviorComponent);
-                            } else {
-                                handleFood(guppy, behaviorComponent);
+                            if(growthComponentFood != null){
+                                //growth levels of food: pellet 0, canned 1, pill 2, potion 3
+                                if (growthComponentFood.growthLevel == 3) {
+                                    handlePotion(guppy, behaviorComponent);
+                                } else {
+                                    handleFood(guppy, behaviorComponent);
+                                }
+                                food.removeComponent(GrowthComponent.class);
+                                EntityManager.getInstance().removeEntity(food);
                             }
 
-                            EntityManager.getInstance().removeEntity(food);
                         }
                 }
             }
@@ -135,8 +140,13 @@ public class GuppyFactory extends Factory {
                 return;
             }
             growthComponent.growthLevel++;
+            BoundingRadiusComponent boundingRadiusComponent = guppy.getComponent(BoundingRadiusComponent.class);
             BoundingCollisionComponent boundingCollisionComponent = guppy.getComponent(BoundingCollisionComponent.class);
-            boundingCollisionComponent.boundingCollisionRadius = boundingCircleRadius[growthComponent.growthLevel];
+            boundingCollisionComponent.boundingCollisionHeight = boundingCircleRadius[growthComponent.growthLevel] * 2;
+            boundingCollisionComponent.boundingCollisionWidth = boundingCircleRadius[growthComponent.growthLevel] * 2;
+
+            boundingRadiusComponent.boundingCollisionRadius = boundingCircleRadius[growthComponent.growthLevel];
+
             TargetComponent targetComponent = guppy.getComponent(TargetComponent.class);
             targetComponent.maskEntity = FishTypeComponent.FISH_TYPE.FISH.value;
 

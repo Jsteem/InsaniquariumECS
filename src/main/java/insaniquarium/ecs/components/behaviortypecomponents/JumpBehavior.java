@@ -1,9 +1,7 @@
 package insaniquarium.ecs.components.behaviortypecomponents;
 
-import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.components.BoundingCollisionComponent;
 import insaniquarium.ecs.components.MovementComponent;
 
 public class JumpBehavior extends BehaviorTypeComponent {

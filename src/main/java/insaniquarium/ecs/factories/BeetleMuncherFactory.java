@@ -58,14 +58,15 @@ public class BeetleMuncherFactory extends Factory{
         beetleMuncher.addComponent(new MovementComponent(x, y, -1, 0, 0, 0));
 
 
-        beetleMuncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius));
+        beetleMuncher.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
 
         beetleMuncher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, CoinTypeComponent.COIN_TYPE.BEETLE.value));
         BehaviorComponent behaviorComponent = new BehaviorComponent(beetleMuncher, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK);
         beetleMuncher.addComponent(behaviorComponent);
-
+        beetleMuncher.addComponent(new FallSpeedComponent(100,0));
+        beetleMuncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
         beetleMuncher.addComponent(new SpawnComponent(beetleMuncher,
-                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 5000, 0));
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 5000, 6));
 
         beetleMuncher.addComponent(new HandleCollisionComponent() {
             @Override
@@ -83,7 +84,16 @@ public class BeetleMuncherFactory extends Factory{
                             behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
                             behaviorComponent.currentBehavior.onEnter(beetleMuncher, behaviorComponent);
 
-                            EntityManager.getInstance().removeEntity(beetle);
+                            GrowthComponent growthComponentFood = beetle.getComponent(GrowthComponent.class);
+
+                            if(growthComponentFood != null){
+
+                                beetle.removeComponent(GrowthComponent.class);
+                                EntityManager.getInstance().removeEntity(beetle);
+                            }
+
+
+
                         }
                 }
             }

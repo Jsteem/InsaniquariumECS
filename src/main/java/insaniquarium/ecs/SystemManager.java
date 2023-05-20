@@ -1,6 +1,7 @@
 package insaniquarium.ecs;
 
 import insaniquarium.ecs.components.BoundingCollisionComponent;
+import insaniquarium.ecs.components.BoundingRadiusComponent;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.TargetComponent;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
@@ -82,11 +83,11 @@ public class SystemManager {
                             MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
                             if (boundingCollisionComponent != null && movementComponent != null) {
                                 objectTypeToKDTree.get(targetMask).add(
-                                        new CollisionObject(entity, movementComponent.x, movementComponent.y, boundingCollisionComponent.boundingCollisionRadius));
+                                        new CollisionObject(entity, movementComponent.x, movementComponent.y,
+                                                boundingCollisionComponent.boundingCollisionWidth, boundingCollisionComponent.boundingCollisionHeight));
                             }
                         }
                     }
-
                 }
             }
         }

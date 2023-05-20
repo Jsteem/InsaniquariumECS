@@ -69,7 +69,7 @@ public class ResourceManager {
 
         nameToInfo.put(ImageInfo.IMAGE_NAME.FOOD, new ImageInfo("food.gif", 40,40,5,10));
         nameToInfo.put(ImageInfo.IMAGE_NAME.MONEY, new ImageInfo("money.gif", 72,72,6,10));
-
+        nameToInfo.put(ImageInfo.IMAGE_NAME.PEARL, new ImageInfo("pearl.gif", 72,72,1,1));
 
         nameToInfo.put(ImageInfo.IMAGE_NAME.SYLVESTER, new ImageInfo("sylv.gif", 160,160,2,10));
 

@@ -28,7 +28,7 @@ public class MenuButton {
         slot = new Entity();
         RenderComponent renderComponent = new RenderComponent(SLOT_BUTTON_UNPRESSED, x, y, 57, 60);
         MovementComponent movementComponent = new MovementComponent(this.x, this.y, 0, 0, 0, 0);
-        BoundingCollisionComponent collisionComponent = new BoundingCollisionComponent(radius);
+        BoundingRadiusComponent collisionComponent = new BoundingRadiusComponent(radius);
         slot.addComponent(renderComponent);
         slot.addComponent(collisionComponent);
         slot.addComponent(movementComponent);

@@ -3,7 +3,7 @@ package insaniquarium.ecs.components.behaviortypecomponents;
 import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.components.BoundingCollisionComponent;
+import insaniquarium.ecs.components.BoundingRadiusComponent;
 import insaniquarium.ecs.components.FallSpeedComponent;
 import insaniquarium.ecs.components.MovementComponent;
 
@@ -32,9 +32,9 @@ public class FallBehavior extends BehaviorTypeComponent {
 
         if (movementComponent != null && fallSpeedComponent != null & component.triggerNextBehaviorTimeMs == 0) {
             int radius = 0;
-            BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
-            if (boundingCollisionComponent != null) {
-                radius = boundingCollisionComponent.boundingCollisionRadius;
+            BoundingRadiusComponent boundingRadiusComponent = entity.getComponent(BoundingRadiusComponent.class);
+            if (boundingRadiusComponent != null) {
+                radius = boundingRadiusComponent.boundingCollisionRadius;
             }
 
             if (movementComponent.y >= Main.HEIGHT - Main.GROUND_OFFSET_HEIGHT - radius) {

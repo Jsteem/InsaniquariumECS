@@ -6,10 +6,7 @@ import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.managers.RenderManager;
-import insaniquarium.managers.drawrequest.CircleShape;
-import insaniquarium.managers.drawrequest.Font;
-import insaniquarium.managers.drawrequest.PlainImage;
-import insaniquarium.managers.drawrequest.Sprite;
+import insaniquarium.managers.drawrequest.*;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -78,12 +75,18 @@ public class RenderSystem extends System {
 
                 }
                 if (Main.DEBUG) {
+                    BoundingRadiusComponent boundingRadiusComponent = entity.getComponent(BoundingRadiusComponent.class);
                     BoundingCollisionComponent boundingCollisionComponent = entity.getComponent(BoundingCollisionComponent.class);
+                    if (boundingRadiusComponent != null && movementComponent != null) {
+                        RenderManager.getInstance().submitDrawRequest(
+                                new CircleShape(2, Color.YELLOW, boundingRadiusComponent.boundingCollisionRadius, movementComponent.x, movementComponent.y));
+                    }
                     if (boundingCollisionComponent != null && movementComponent != null) {
                         RenderManager.getInstance().submitDrawRequest(
-                                new CircleShape(2, Color.YELLOW, boundingCollisionComponent.boundingCollisionRadius, movementComponent.x, movementComponent.y));
+                                new RectangleShape(2, Color.RED,
+                                        movementComponent.x, movementComponent.y,
+                                        boundingCollisionComponent.boundingCollisionWidth, boundingCollisionComponent.boundingCollisionHeight));
                     }
-
 
 
                 }

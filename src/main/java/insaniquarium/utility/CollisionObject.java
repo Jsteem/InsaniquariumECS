@@ -6,12 +6,14 @@ public class CollisionObject {
     public Entity entity;
     public float x;
     public float y;
-    public int radius;
-    public CollisionObject(Entity entity, float x, float y, int radius){
+    public int width;
+    public int height;
+    public CollisionObject(Entity entity, float x, float y, int width, int height){
         this.entity = entity;
         this.x = x;
         this.y = y;
-        this.radius = radius;
+        this.width = width;
+        this.height = height;
 
     }
 
