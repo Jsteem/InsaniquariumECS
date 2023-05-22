@@ -7,7 +7,9 @@ import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
+import insaniquarium.ecs.components.animationtypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;
@@ -58,17 +60,66 @@ public class BreederFactory extends Factory{
 
         breeder.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
         breeder.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
-        breeder.addComponent(new BehaviorComponent(breeder, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.IDLE));
+        breeder.addComponent(new BehaviorComponent(breeder, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK));
         breeder.addComponent(new SpawnComponent(breeder, FactoryManager.getInstance().getFactory(FishTypeComponent.FISH_TYPE.GUPPY_SMALL), 5000, 0));
         breeder.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
 
 
+        breeder.addComponent(new FallSpeedComponent(150,0));
 
-        EntityManager.getInstance().addEntity(breeder);
+        breeder.addComponent(new IdleRandomTargetPosition(0 , 0));
+
+        breeder.addComponent(new HandleCollisionComponent() {
+            @Override
+            public void handleCollision(Entity breeder, Entity food, long mask) {
+                BehaviorComponent behaviorComponent = breeder.getComponent(BehaviorComponent.class);
+                AnimationComponent animationComponent = breeder.getComponent(AnimationComponent.class);
+
+                if (behaviorComponent != null && animationComponent != null) {
+                    if (animationComponent.animationComplete ||
+                            (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN &&
+                                    animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)
+                    )
+                        if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
+
+
+                                handleFood(breeder, behaviorComponent);
+                                EntityManager.getInstance().removeEntity(food);
+
+                        }
+                }
+            }
+        });
+
+
         return breeder;
 
     }
+    public void handleFood(Entity breeder, BehaviorComponent behaviorComponent) {
+        behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
+        behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
+        behaviorComponent.currentBehavior.onEnter(breeder, behaviorComponent);
+        AnimationComponent animationComponent = breeder.getComponent(AnimationComponent.class);
+        AnimationTypeComponent idle = animationComponent.types.get(AnimationComponent.AnimationType.IDLE);
+        if (idle.rowNr < 4) {
+            animationComponent.types.get(AnimationComponent.AnimationType.IDLE).rowNr+=3;
+            animationComponent.types.get(AnimationComponent.AnimationType.EAT).rowNr+=3;
+            animationComponent.types.get(AnimationComponent.AnimationType.TURN).rowNr+=3;
 
+            animationComponent.types.get(AnimationComponent.AnimationType.HUNGRY_EAT).rowNr++;
+
+            animationComponent.types.get(AnimationComponent.AnimationType.DIE).rowNr+=3;
+            animationComponent.types.get(AnimationComponent.AnimationType.HUNGRY_IDLE).rowNr+=3;
+            animationComponent.types.get(AnimationComponent.AnimationType.HUNGRY_TURN).rowNr+=3;
+
+            //BoundingRadiusComponent boundingRadiusComponent = breeder.getComponent(BoundingRadiusComponent.class);
+            //BoundingCollisionComponent boundingCollisionComponent = breeder.getComponent(BoundingCollisionComponent.class);
+            //boundingCollisionComponent.boundingCollisionHeight = boundingCircleRadius[growthComponent.growthLevel] * 2;
+            //boundingCollisionComponent.boundingCollisionWidth = boundingCircleRadius[growthComponent.growthLevel] * 2;
+            //boundingRadiusComponent.boundingCollisionRadius = boundingCircleRadius[growthComponent.growthLevel];
+
+        }
+    }
     @Override
     public Entity createDisplayEntity(int x, int y) {
 

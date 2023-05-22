@@ -58,7 +58,7 @@ public class CarnivoreFactory extends Factory{
         int boundingCircleRadius = 40;
 
         carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
-        carnivore.addComponent(new IdlePosition(0,0));
+        carnivore.addComponent(new IdleRandomTargetPosition(0,0));
 
         carnivore.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
         carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
@@ -78,10 +78,15 @@ public class CarnivoreFactory extends Factory{
                                     animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)
                     ) {
                         if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
-                            behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
-                            behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
-                            behaviorComponent.currentBehavior.onEnter(entity, behaviorComponent);
-                            EntityManager.getInstance().removeEntity(target);
+
+
+
+                                behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
+                                behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
+                                behaviorComponent.currentBehavior.onEnter(entity, behaviorComponent);
+                                EntityManager.getInstance().removeEntity(target);
+
+
 
                         }
                     }

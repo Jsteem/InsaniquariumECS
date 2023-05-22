@@ -2,7 +2,7 @@ package insaniquarium.game.data;
 
 public class PlayerData {
     private String name;
-    private int unlockedTankNumber = 2;
+    private int unlockedTankNumber = 3;
     private int unlockedLevelNumber = 3;
 
     public PlayerData(String name){

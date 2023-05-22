@@ -65,7 +65,6 @@ public class GuppyFactory extends Factory {
 
 
         guppy.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
-        guppy.addComponent(new GrowthComponent(level));
 
         guppy.addComponent(new BoundingRadiusComponent(boundingCircleRadius[0]));
 
@@ -75,32 +74,32 @@ public class GuppyFactory extends Factory {
 
         guppy.addComponent(new FallSpeedComponent(150,0));
 
-        guppy.addComponent(new IdlePosition(0 , 0));
+        guppy.addComponent(new IdleRandomTargetPosition(0 , 0));
 
         guppy.addComponent(new HandleCollisionComponent() {
             @Override
             public void handleCollision(Entity guppy, Entity food, long mask) {
                 BehaviorComponent behaviorComponent = guppy.getComponent(BehaviorComponent.class);
                 AnimationComponent animationComponent = guppy.getComponent(AnimationComponent.class);
-                GrowthComponent growthComponent = guppy.getComponent(GrowthComponent.class);
 
-                if (behaviorComponent != null && animationComponent != null && growthComponent != null) {
+                if (behaviorComponent != null && animationComponent != null) {
                     if (animationComponent.animationComplete ||
                             (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN &&
                                     animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)
                     )
                         if (behaviorComponent.currentBehavior == behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK)) {
 
-                            GrowthComponent growthComponentFood = food.getComponent(GrowthComponent.class);
+                            AnimationComponent animationFood = food.getComponent(AnimationComponent.class);
 
-                            if(growthComponentFood != null){
+                            if(animationFood != null){
+                                AnimationTypeComponent idle = animationFood.types.get(AnimationComponent.AnimationType.IDLE);
                                 //growth levels of food: pellet 0, canned 1, pill 2, potion 3
-                                if (growthComponentFood.growthLevel == 3) {
+                                if (idle.rowNr == 3) {
                                     handlePotion(guppy, behaviorComponent);
                                 } else {
                                     handleFood(guppy, behaviorComponent);
                                 }
-                                food.removeComponent(GrowthComponent.class);
+
                                 EntityManager.getInstance().removeEntity(food);
                             }
 
@@ -109,7 +108,7 @@ public class GuppyFactory extends Factory {
             }
         });
 
-        EntityManager.getInstance().addEntity(guppy);
+
         return guppy;
     }
 
@@ -132,20 +131,34 @@ public class GuppyFactory extends Factory {
         behaviorComponent.previousBehavior = behaviorComponent.currentBehavior;
         behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
         behaviorComponent.currentBehavior.onEnter(guppy, behaviorComponent);
-        GrowthComponent growthComponent = guppy.getComponent(GrowthComponent.class);
-        if (growthComponent.growthLevel < 3) {
+
+        AnimationComponent animationGuppy = guppy.getComponent(AnimationComponent.class);
+        AnimationTypeComponent idle = animationGuppy.types.get(AnimationComponent.AnimationType.IDLE);
+        int level = idle.rowNr;
+
+        if (level < 3) {
+
             SpawnComponent spawnComponent = guppy.getComponent(SpawnComponent.class);
             if (spawnComponent != null && spawnComponent.level == 2) {
                 //star dropping guppies get unaffected
                 return;
             }
-            growthComponent.growthLevel++;
+
             BoundingRadiusComponent boundingRadiusComponent = guppy.getComponent(BoundingRadiusComponent.class);
             BoundingCollisionComponent boundingCollisionComponent = guppy.getComponent(BoundingCollisionComponent.class);
-            boundingCollisionComponent.boundingCollisionHeight = boundingCircleRadius[growthComponent.growthLevel] * 2;
-            boundingCollisionComponent.boundingCollisionWidth = boundingCircleRadius[growthComponent.growthLevel] * 2;
+            boundingCollisionComponent.boundingCollisionHeight = boundingCircleRadius[level+1] * 2;
+            boundingCollisionComponent.boundingCollisionWidth = boundingCircleRadius[level+1] * 2;
+            boundingRadiusComponent.boundingCollisionRadius = boundingCircleRadius[level+1];
 
-            boundingRadiusComponent.boundingCollisionRadius = boundingCircleRadius[growthComponent.growthLevel];
+            animationGuppy.types.get(AnimationComponent.AnimationType.IDLE).rowNr++;
+            animationGuppy.types.get(AnimationComponent.AnimationType.EAT).rowNr++;
+            animationGuppy.types.get(AnimationComponent.AnimationType.TURN).rowNr++;
+            animationGuppy.types.get(AnimationComponent.AnimationType.HUNGRY_EAT).rowNr++;
+
+            animationGuppy.types.get(AnimationComponent.AnimationType.DIE).rowNr++;
+            animationGuppy.types.get(AnimationComponent.AnimationType.HUNGRY_IDLE).rowNr++;
+            animationGuppy.types.get(AnimationComponent.AnimationType.HUNGRY_TURN).rowNr++;
+
 
             TargetComponent targetComponent = guppy.getComponent(TargetComponent.class);
             targetComponent.maskEntity = FishTypeComponent.FISH_TYPE.FISH.value;
@@ -155,15 +168,18 @@ public class GuppyFactory extends Factory {
                         FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 8000, 0);
                 guppy.addComponent(spawnComponent);
             }
-            spawnComponent.level = growthComponent.growthLevel < 3 ? growthComponent.growthLevel - 1 : 3;
+            spawnComponent.level = level < 2 ? level : 3;
 
         }
     }
     public void handlePotion(Entity guppy, BehaviorComponent behaviorComponent) {
         if (behaviorComponent.currentBehavior != behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN)) {
-            GrowthComponent growthComponent = guppy.getComponent(GrowthComponent.class);
+
             AnimationComponent animationComponent = guppy.getComponent(AnimationComponent.class);
-            if (growthComponent.growthLevel < 2) {
+            AnimationTypeComponent idle = animationComponent.types.get(AnimationComponent.AnimationType.IDLE);
+            int level = idle.rowNr;
+
+            if (level < 2) {
                 //small and medium guppy die
 
                 behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN);
@@ -171,7 +187,7 @@ public class GuppyFactory extends Factory {
                 behaviorComponent.currentBehavior.onEnter(guppy, behaviorComponent);
                 animationComponent.setActiveType(AnimationComponent.AnimationType.DIE);
 
-            } else if (growthComponent.growthLevel < 3) {
+            } else if (level < 3) {
                 //large gets star type, king gets unaffected
                 if( guppy.getComponent(SpawnComponent.class).level == 2) {
                     return;
@@ -183,31 +199,31 @@ public class GuppyFactory extends Factory {
                 HashMap<AnimationComponent.AnimationType, AnimationTypeComponent> animationComponents = new HashMap<>();
                 animationComponents.put(
                         AnimationComponent.AnimationType.IDLE,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM_STAR, AnimationComponent.AnimationType.IDLE, 0, 0.07, true, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_SWIM_STAR, AnimationComponent.AnimationType.IDLE, 2, 0.07, true, 1));
 
                 animationComponents.put(
                         AnimationComponent.AnimationType.TURN,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN_STAR, AnimationComponent.AnimationType.TURN, 0, 0.04, false, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_TURN_STAR, AnimationComponent.AnimationType.TURN, 2, 0.04, false, 1));
 
                 animationComponents.put(
                         AnimationComponent.AnimationType.EAT,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT_STAR, AnimationComponent.AnimationType.EAT, 0, 0.04, false, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_EAT_STAR, AnimationComponent.AnimationType.EAT, 2, 0.04, false, 1));
 
                 animationComponents.put(
                         AnimationComponent.AnimationType.DIE,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_DIE_STAR, AnimationComponent.AnimationType.DIE, 0, 0.07, false, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.SMALL_DIE_STAR, AnimationComponent.AnimationType.DIE, 2, 0.07, false, 1));
 
                 animationComponents.put(
                         AnimationComponent.AnimationType.HUNGRY_IDLE,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_SWIM_STAR, AnimationComponent.AnimationType.HUNGRY_IDLE, 0, 0.07, true, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_SWIM_STAR, AnimationComponent.AnimationType.HUNGRY_IDLE, 2, 0.07, true, 1));
 
                 animationComponents.put(
                         AnimationComponent.AnimationType.HUNGRY_TURN,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_TURN_STAR, AnimationComponent.AnimationType.HUNGRY_TURN, 0, 0.04, false, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_TURN_STAR, AnimationComponent.AnimationType.HUNGRY_TURN, 2, 0.04, false, 1));
 
                 animationComponents.put(
                         AnimationComponent.AnimationType.HUNGRY_EAT,
-                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT_STAR, AnimationComponent.AnimationType.HUNGRY_EAT, 0, 0.04, false, 1));
+                        new IdleAnimation(ImageInfo.IMAGE_NAME.HUNGRY_EAT_STAR, AnimationComponent.AnimationType.HUNGRY_EAT, 2, 0.04, false, 1));
                 guppy.addComponent(new AnimationComponent(animationComponents));
 
 

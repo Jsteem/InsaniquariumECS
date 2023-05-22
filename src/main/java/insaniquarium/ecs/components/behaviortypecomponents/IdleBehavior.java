@@ -2,13 +2,9 @@ package insaniquarium.ecs.components.behaviortypecomponents;
 
 import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
-import insaniquarium.ecs.SystemManager;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
-import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
-import insaniquarium.ecs.components.animationtypecomponents.IdlePosition;
-import insaniquarium.utility.CollisionObject;
-import insaniquarium.utility.KDTree;
+import insaniquarium.ecs.components.animationtypecomponents.IdleRandomTargetPosition;
 
 import java.util.Random;
 
@@ -20,11 +16,12 @@ public class IdleBehavior extends BehaviorTypeComponent {
 
     @Override
     public void onEnter(Entity entity, BehaviorComponent component) {
+
         component.triggerNextBehaviorTimeMs = durationBehaviorMs;
         component.passedTimeMs = 0;
 
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
-        IdlePosition idlePosition = entity.getComponent(IdlePosition.class);
+        IdleRandomTargetPosition idlePosition = entity.getComponent(IdleRandomTargetPosition.class);
         if (animationComponent != null) {
             animationComponent.setActiveTypeSmooth(AnimationComponent.AnimationType.IDLE);
         }
@@ -45,7 +42,7 @@ public class IdleBehavior extends BehaviorTypeComponent {
 
 
         MovementComponent movementComponent = entity.getComponent(MovementComponent.class);
-        IdlePosition idlePosition = entity.getComponent(IdlePosition.class);
+        IdleRandomTargetPosition idlePosition = entity.getComponent(IdleRandomTargetPosition.class);
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
 
         if (movementComponent != null && idlePosition != null) {
@@ -138,6 +135,7 @@ public class IdleBehavior extends BehaviorTypeComponent {
 
     @Override
     public void onExit(Entity entity, BehaviorComponent component) {
+
         component.passedTimeMs = 0;
         component.previousBehavior = this;
         if (component.nextBehavior != null) {

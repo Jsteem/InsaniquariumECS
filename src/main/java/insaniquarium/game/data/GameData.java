@@ -73,7 +73,8 @@ public class GameData {
         if(totalAmountOfMoney >= buyPrice){
             switch (id){
                 case 0 -> {
-                    FactoryManager.getInstance().getFactory(slotData[0]).createEntity(100,200,0);
+                    Entity entity = FactoryManager.getInstance().getFactory(slotData[0]).createEntity(100,200,0);
+                    EntityManager.getInstance().addEntity(entity);
                     buy(buyPrice);
                 }
                 case 1 -> {

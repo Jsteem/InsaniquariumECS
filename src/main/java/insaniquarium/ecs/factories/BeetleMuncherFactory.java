@@ -84,14 +84,8 @@ public class BeetleMuncherFactory extends Factory{
                             behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
                             behaviorComponent.currentBehavior.onEnter(beetleMuncher, behaviorComponent);
 
-                            GrowthComponent growthComponentFood = beetle.getComponent(GrowthComponent.class);
 
-                            if(growthComponentFood != null){
-
-                                beetle.removeComponent(GrowthComponent.class);
-                                EntityManager.getInstance().removeEntity(beetle);
-                            }
-
+                            EntityManager.getInstance().removeEntity(beetle);
 
 
                         }

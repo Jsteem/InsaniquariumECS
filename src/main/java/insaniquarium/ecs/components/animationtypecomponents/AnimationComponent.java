@@ -17,7 +17,7 @@ public class AnimationComponent extends Component {
 
     public boolean update = true;
 
-    HashMap<AnimationType, AnimationTypeComponent> types;
+    public HashMap<AnimationType, AnimationTypeComponent> types;
 
 
 

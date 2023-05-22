@@ -35,8 +35,6 @@ public class FoodFactory extends Factory{
 
         food.addComponent(new BehaviorComponent(food, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, null));
 
-        food.addComponent(new GrowthComponent(level));
-
         food.addComponent(new FallSpeedComponent(75,0));
 
         return food;

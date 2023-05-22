@@ -24,7 +24,6 @@ public class CoinFactory extends Factory {
                     new IdleAnimation(ImageInfo.IMAGE_NAME.MONEY, AnimationComponent.AnimationType.IDLE, level, 0.07, true, 1));
             AnimationComponent animationComponent = new AnimationComponent(animationComponents);
             coin.addComponent(animationComponent);
-            coin.addComponent(new GrowthComponent(level));
             coin.addComponent(new MoneyValueComponent(level));
 
         } else {
@@ -32,7 +31,6 @@ public class CoinFactory extends Factory {
                     AnimationComponent.AnimationType.IDLE,
                     new IdleAnimation(ImageInfo.IMAGE_NAME.PEARL, AnimationComponent.AnimationType.IDLE, 0, 0.07, false, 1));
             AnimationComponent animationComponent = new AnimationComponent(animationComponents);
-            coin.addComponent(new GrowthComponent(0));
             coin.addComponent(animationComponent);
             coin.addComponent(new MoneyValueComponent(3));
         }

@@ -89,8 +89,11 @@ public class GameImage {
                     }
                 }
                 combined.setRGB(x, y, originalRGB);
+
             }
         }
+
+
         image = SwingFXUtils.toFXImage(combined, null);
     }
     public void alterGameImageIntensity(float transparency, double greenFactor, double blueFactor, double redFactor){

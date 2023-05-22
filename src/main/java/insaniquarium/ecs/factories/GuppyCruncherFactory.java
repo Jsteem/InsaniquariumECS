@@ -70,9 +70,8 @@ public class GuppyCruncherFactory extends Factory{
                         behaviorComponent.currentBehavior = behaviorComponent.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.EAT);
                         behaviorComponent.currentBehavior.onEnter(guppyCruncher, behaviorComponent);
 
-                        GrowthComponent growthComponentFood = guppy.getComponent(GrowthComponent.class);
 
-                        if(growthComponentFood != null){
+
 
                             Entity beetle = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) movementComponent.x, (int) movementComponent.y, 5 );
                             beetle.removeComponent(BehaviorComponent.class);
@@ -80,9 +79,8 @@ public class GuppyCruncherFactory extends Factory{
                             beetle.addComponent(behaviorComponentDiamond);
                             EntityManager.getInstance().addEntity(beetle);
 
-                            guppy.removeComponent(GrowthComponent.class);
                             EntityManager.getInstance().removeEntity(guppy);
-                        }
+
 
 
                     }
