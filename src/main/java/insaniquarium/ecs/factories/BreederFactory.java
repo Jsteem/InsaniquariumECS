@@ -2,12 +2,11 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
-import insaniquarium.ecs.components.animationtypecomponents.IdleRandomTargetPosition;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
@@ -61,13 +60,13 @@ public class BreederFactory extends Factory{
         breeder.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
         breeder.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
         breeder.addComponent(new BehaviorComponent(breeder, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK));
-        breeder.addComponent(new SpawnComponent(breeder, FactoryManager.getInstance().getFactory(FishTypeComponent.FISH_TYPE.GUPPY_SMALL), 5000, 0));
+        breeder.addComponent(new SpawnComponent(breeder, FactoryManager.getInstance().getFactory(FishTypeComponent.FISH_TYPE.GUPPY_SMALL), 5000, 0, FishTypeComponent.FISH_TYPE.GUPPY_SMALL));
         breeder.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FoodTypeComponent.FOOD_TYPE.FOOD.value));
 
 
         breeder.addComponent(new FallSpeedComponent(150,0));
 
-        breeder.addComponent(new IdleRandomTargetPosition(0 , 0));
+        breeder.addComponent(new IdleRandomTargetPosition(0 , 0, false));
 
         breeder.addComponent(new HandleCollisionComponent() {
             @Override

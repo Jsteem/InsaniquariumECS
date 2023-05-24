@@ -4,7 +4,6 @@ import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
-import insaniquarium.ecs.components.animationtypecomponents.IdleRandomTargetPosition;
 
 import java.util.Random;
 
@@ -22,7 +21,7 @@ public class IdleBehavior extends BehaviorTypeComponent {
 
         AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
         IdleRandomTargetPosition idlePosition = entity.getComponent(IdleRandomTargetPosition.class);
-        if (animationComponent != null) {
+        if (idlePosition == null) {
             animationComponent.setActiveTypeSmooth(AnimationComponent.AnimationType.IDLE);
         }
         if(idlePosition != null){
@@ -142,7 +141,14 @@ public class IdleBehavior extends BehaviorTypeComponent {
 
             component.currentBehavior = component.nextBehavior;
         } else {
-            component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
+            IdleRandomTargetPosition idleRandomTargetPosition = entity.getComponent(IdleRandomTargetPosition.class);
+            if(idleRandomTargetPosition!= null && idleRandomTargetPosition.onlyIdle){
+                component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.IDLE);
+            }
+            else{
+                component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
+            }
+
         }
     }
 }

@@ -21,19 +21,56 @@ public class AnimationSystem extends System {
             if(animationComponent != null){
                 if(animationComponent.update){
                     int maxCols = ResourceManager.getInstance().getImageInfo(animationComponent.activeType.spriteName).numCols;
+
+
                     if(animationComponent.timeSinceLastUpdateAnimation >= animationComponent.activeType.animationSpeed){
-                        if(++animationComponent.frameNr > maxCols - 1){
-                            animationComponent.animationComplete = true;
-                            if(animationComponent.activeType.loop){
-                                animationComponent.frameNr = 0;
+                        if(animationComponent.leftToRight){
+
+                            if(++animationComponent.frameNr > maxCols - 1){
+                                if(animationComponent.nextAnimation != null){
+                                    animationComponent.activeType = animationComponent.nextAnimation;
+                                    animationComponent.nextAnimation = null;
+
+                                }
+                                animationComponent.animationComplete = true;
+                                if(animationComponent.activeType.loop){
+                                    animationComponent.frameNr = 0;
+                                }
+                                else{
+                                    animationComponent.frameNr = maxCols - 1;
+                                    animationComponent.update = false;
+                                }
                             }
-                            else{
-                                animationComponent.frameNr = maxCols - 1;
-                                animationComponent.update = false;
+
+                        }
+                        else{
+                            if(--animationComponent.frameNr <= 0){
+                                if(animationComponent.nextAnimation != null){
+                                    animationComponent.activeType = animationComponent.nextAnimation;
+                                    animationComponent.nextAnimation = null;
+
+                                }
+
+                                animationComponent.animationComplete = true;
+                                if(animationComponent.activeType.loop){
+                                    animationComponent.frameNr = maxCols -1;
+                                }
+                                else{
+                                    animationComponent.frameNr = 0;
+                                    animationComponent.update = false;
+                                }
                             }
                         }
+
+
+
+
+
                         animationComponent.timeSinceLastUpdateAnimation -= animationComponent.activeType.animationSpeed;
                     }
+
+
+
                     animationComponent.timeSinceLastUpdateAnimation += delta;
                 }
             }

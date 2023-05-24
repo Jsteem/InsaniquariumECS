@@ -1,6 +1,7 @@
 package insaniquarium.ecs;
 
-import java.util.ArrayList;
+import insaniquarium.ecs.components.Component;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

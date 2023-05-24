@@ -2,12 +2,11 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
-import insaniquarium.ecs.components.animationtypecomponents.IdleRandomTargetPosition;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
@@ -46,7 +45,7 @@ public class StarCatcherFactory extends Factory{
 
         starCatcher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, CoinTypeComponent.COIN_TYPE.STAR.value));
         starCatcher.addComponent(new BehaviorComponent(starCatcher, BehaviorComponent.BEHAVIOR_TYPE.FALL_DOWN, BehaviorComponent.BEHAVIOR_TYPE.IDLE, true));
-        starCatcher.addComponent(new IdleRandomTargetPosition(0,0));
+        starCatcher.addComponent(new IdleRandomTargetPosition(0,0, false));
         starCatcher.addComponent(new FallSpeedComponent(100,0));
 
         starCatcher.addComponent(new HandleCollisionComponent() {

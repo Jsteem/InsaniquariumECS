@@ -1,7 +1,6 @@
 package insaniquarium.ecs.components.animationtypecomponents;
 
-import insaniquarium.ecs.Component;
-import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
+import insaniquarium.ecs.components.Component;
 
 import java.util.HashMap;
 
@@ -17,13 +16,19 @@ public class AnimationComponent extends Component {
 
     public boolean update = true;
 
+    public boolean leftToRight = true;
     public HashMap<AnimationType, AnimationTypeComponent> types;
 
+    public AnimationTypeComponent nextAnimation;
+
+    public void setNextActiveType(AnimationType type) {
+        this.nextAnimation = types.get(type);
+    }
 
 
     //our sprites have typically these animations: IDLE, TURN, EAT, DIE, HUNGRY_IDLE, HUNGRY_TURN, HUNGRY_EAT
     public enum AnimationType{
-        IDLE,EAT,TURN,DIE, HUNGRY_IDLE, HUNGRY_TURN, HUNGRY_EAT
+        IDLE,EAT,TURN,DIE, HUNGRY_IDLE, HUNGRY_TURN, ON_ATTACK, SPECIAL_MOVE_START, SPECIAL_MOVE_STOP, HUNGRY_EAT
     }
     public AnimationComponent(HashMap<AnimationType, AnimationTypeComponent> types){
         this.types = types;
@@ -45,6 +50,16 @@ public class AnimationComponent extends Component {
             activeType = types.get(animationType);
         }
 
+    }
+    public void setLeftToRight(){
+        update = true;
+        this.leftToRight = true;
+        this.frameNr = 0;
+    }
+    public void setRightToLeft(){
+        update = true;
+        this.leftToRight = false;
+        this.frameNr = 9;
     }
 
 

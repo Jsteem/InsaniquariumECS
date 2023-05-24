@@ -3,15 +3,12 @@ package insaniquarium.game;
 import insaniquarium.Main;
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
-import insaniquarium.ecs.SystemManager;
+import insaniquarium.ecs.components.typecomponents.*;
+import insaniquarium.ecs.factories.FactoryManager;
+import insaniquarium.ecs.systems.SystemManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleNoCollision;
-import insaniquarium.ecs.components.typecomponents.AlienTypeComponent;
-import insaniquarium.ecs.components.typecomponents.ClickTypeComponent;
-import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
-import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.ecs.systems.*;
 import insaniquarium.game.data.GameData;
 import insaniquarium.game.data.PlayerData;
@@ -25,14 +22,24 @@ public class GameCanvas extends Canvas {
     public static final int GROUND_OFFSET_HEIGHT = 40;
     public static final int SIDE_OFFSET = 20;
 
-    PlayerData playerData = new PlayerData("testPlayer");
-    GameData gameData;
+    static PlayerData playerData = new PlayerData("testPlayer");
+    static GameData gameData;
 
     private void init() {
 
-
         gameData = new GameData(this, playerData);
+        initPets();
+    }
 
+    public void initPets(){
+        FactoryManager.getInstance().getFactory(PetTypeComponent.PET_TYPE.STINKY).createEntity(500,500,0);
+        FactoryManager.getInstance().getFactory(PetTypeComponent.PET_TYPE.NIKO).createEntity(0,0,0);
+        FactoryManager.getInstance().getFactory(PetTypeComponent.PET_TYPE.ZORF).createEntity(0,0,0);
+        FactoryManager.getInstance().getFactory(PetTypeComponent.PET_TYPE.VERT).createEntity(0,0,0);
+        //FactoryManager.getInstance().getFactory(PetTypeComponent.PET_TYPE.CLYDE).createEntity(0,0,0);
+        //FactoryManager.getInstance().getFactory(PetTypeComponent.PET_TYPE.MERYL).createEntity(0,0,0);
+
+        FactoryManager.getInstance().getFactory(AlienTypeComponent.ALIEN_TYPE.SYLVESTER).createEntity(500,500,0);
     }
 
     public void onFinishLevel() {
@@ -49,8 +56,8 @@ public class GameCanvas extends Canvas {
         SystemManager.getInstance().registerSystem(new MovementSystem());
         SystemManager.getInstance().registerSystem(new AISystem());
         SystemManager.getInstance().registerRenderSystem(new RenderSystem());
-
         init();
+
 
     }
 
@@ -74,7 +81,7 @@ public class GameCanvas extends Canvas {
             MovementComponent movementComponent = new MovementComponent((float) x, (float) y, 0, 0, 0, 0);
             TargetComponent targetComponent = new TargetComponent(ClickTypeComponent.CLICK_TYPE.CLICK.value,
                     AlienTypeComponent.ALIEN_TYPE.ALIEN.value | CoinTypeComponent.COIN_TYPE.COLLECTABLE.value |
-                            CoinTypeComponent.COIN_TYPE.BEETLE.value | CoinTypeComponent.COIN_TYPE.STAR.value);
+                            CoinTypeComponent.COIN_TYPE.BEETLE.value | CoinTypeComponent.COIN_TYPE.STAR.value | PetTypeComponent.PET_TYPE.PET.value);
 
 
             HandleNoCollision handleNoCollision = new HandleNoCollision() {
@@ -89,10 +96,10 @@ public class GameCanvas extends Canvas {
                         movementComponent.y = y;
                         specialFoodEntities.remove(0);
                     } else if (gameData.subtractFromTotalAmountOfMoney(5)) {
-                        foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int) x, (int) y, gameData.getTierFood());
+                        //foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int) x, (int) y, gameData.getTierFood());
 
                         //DEBUG - spawn a star:
-                        //foodEntity = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) x, (int) y,2);
+                        foodEntity = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) x, (int) y,2);
 
                         //DEBUG - spawn a beetle:
                         //foodEntity = FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE).createEntity((int) x, (int) y,5);
@@ -109,8 +116,18 @@ public class GameCanvas extends Canvas {
                     MoneyValueComponent moneyValueComponent = target.getComponent(MoneyValueComponent.class);
                     if(moneyValueComponent != null){
                         gameData.addToTotalAmountOfMoney(moneyValueComponent.moneyValue);
+                        EntityManager.getInstance().removeEntity(target);
                     }
-                    EntityManager.getInstance().removeEntity(target);
+                    SpecialMoveActionComponent specialMoveActionComponent = target.getComponent(SpecialMoveActionComponent.class);
+                    if(specialMoveActionComponent != null){
+                        specialMoveActionComponent.handleSpecialMove();
+                    }
+                    AttackComponent attackComponent = target.getComponent(AttackComponent.class);
+                    if (attackComponent != null) {
+                        attackComponent.handleAttack((int)x,(int)y, gameData.getWeaponTier());
+
+                    }
+
                 }
             });
             click.addComponent(handleNoCollision);
@@ -124,6 +141,14 @@ public class GameCanvas extends Canvas {
 
     public void render() {
         RenderManager.getInstance().draw(getGraphicsContext2D());
+    }
+
+    public static void increaseMoney(int amount){
+        gameData.addToTotalAmountOfMoney(amount);
+    }
+
+    public static int getTankNumber(){
+        return playerData.getUnlockedTankNumber();
     }
 
 }

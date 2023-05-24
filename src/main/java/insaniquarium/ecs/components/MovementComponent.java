@@ -1,7 +1,5 @@
 package insaniquarium.ecs.components;
 
-import insaniquarium.ecs.Component;
-
 public class MovementComponent extends Component {
     public float x;
     public float y;
@@ -9,6 +7,8 @@ public class MovementComponent extends Component {
     public float vy;
     public float ax;
     public float ay;
+    public boolean overWrite = false;
+
 
     public MovementComponent(float x, float y, float vx, float vy, float ax, float ay){
         this.x = x;
@@ -17,6 +17,7 @@ public class MovementComponent extends Component {
         this.vy = vy;
         this.ax = ax;
         this.ay = ay;
+
     }
 
 

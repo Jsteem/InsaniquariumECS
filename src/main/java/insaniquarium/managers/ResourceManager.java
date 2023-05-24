@@ -116,6 +116,17 @@ public class ResourceManager {
         nameToInfo.put(ImageInfo.IMAGE_NAME.HUNGRY_TURN_STAR,
                 new ImageInfo(nameToInfo.get(ImageInfo.IMAGE_NAME.HUNGRY_TURN), 0.7f, 1.4, 1, 1,  null, 0));
 
+        nameToInfo.put(ImageInfo.IMAGE_NAME.STINKY, new ImageInfo("stinky.gif", 80, 80, 3, 10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.NIKO, new ImageInfo("niko.gif", 80, 80, 3, 10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.ZORF, new ImageInfo("zorf.gif", 80, 80, 3, 10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.PREGO, new ImageInfo("prego.gif", 80, 80, 4, 10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.VERT, new ImageInfo("vert.gif", 80, 80, 2, 10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.CLYDE, new ImageInfo("clyde.gif", 80, 80, 1, 10));
+        nameToInfo.put(ImageInfo.IMAGE_NAME.MERYL, new ImageInfo("meryl.gif", 80, 80, 3, 10)); //todo: eye blinking?
+
+
+
+
     }
 
 

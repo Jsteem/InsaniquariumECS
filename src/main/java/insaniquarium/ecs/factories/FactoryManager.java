@@ -1,9 +1,9 @@
-package insaniquarium.ecs;
+package insaniquarium.ecs.factories;
 
-import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
-import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
-import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
-import insaniquarium.ecs.factories.*;
+import insaniquarium.ecs.components.typecomponents.*;
+import insaniquarium.ecs.factories.aliens.Sylvester;
+import insaniquarium.ecs.factories.pets.tank1.*;
+import insaniquarium.ecs.factories.pets.tank2.*;
 
 import java.util.HashMap;
 
@@ -21,7 +21,22 @@ public class FactoryManager {
         typeToFactory.put(FishTypeComponent.FISH_TYPE.BREEDER, new BreederFactory());
         typeToFactory.put(FishTypeComponent.FISH_TYPE.ULTRAVORE, new UltravoreFactory());
         typeToFactory.put(CoinTypeComponent.COIN_TYPE.COLLECTABLE, new CoinFactory());
+        //PETS TANK1
+        typeToFactory.put(PetTypeComponent.PET_TYPE.STINKY, new Stinky());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.NIKO, new Niko());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.ITCHY, new Itchy());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.PREGO, new Prego());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.ZORF, new Zorf());
+        //PETS TANK2
+        typeToFactory.put(PetTypeComponent.PET_TYPE.VERT, new Vert());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.CLYDE, new Clyde());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.MERYL, new Meryl());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.WADSWORTH, new Wadsworth());
+        typeToFactory.put(PetTypeComponent.PET_TYPE.RUFUS, new Rufus());
 
+
+        //ALIENS
+        typeToFactory.put(AlienTypeComponent.ALIEN_TYPE.SYLVESTER, new Sylvester());
     }
     public static FactoryManager getInstance(){
         if(instance == null){

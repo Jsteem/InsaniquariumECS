@@ -2,7 +2,7 @@ package insaniquarium.game.data;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
+import insaniquarium.ecs.factories.FactoryManager;
 import insaniquarium.ecs.components.RenderComponent;
 import insaniquarium.ecs.components.TargetComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
@@ -63,10 +63,6 @@ public class GameData {
         return maxFood;
     }
 
-    public void increaseMoney(int money){
-        this.totalAmountOfMoney += money;
-
-    }
 
     public void handleButtonPress(int id) {
         int buyPrice = priceData[id];
@@ -198,5 +194,10 @@ public class GameData {
     public void addToTotalAmountOfMoney(int amount){
         this.totalAmountOfMoney += amount;
         menuOverlay.updateTotalMoneyAmount(totalAmountOfMoney);
+    }
+
+
+    public int getWeaponTier() {
+        return laserUpgrade;
     }
 }

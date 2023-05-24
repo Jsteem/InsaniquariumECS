@@ -2,12 +2,12 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
@@ -59,6 +59,7 @@ public class BeetleMuncherFactory extends Factory{
 
 
         beetleMuncher.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
+        beetleMuncher.addComponent(new IdleRandomTargetPosition(0,0, false));
 
         beetleMuncher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, CoinTypeComponent.COIN_TYPE.BEETLE.value));
         BehaviorComponent behaviorComponent = new BehaviorComponent(beetleMuncher, BehaviorComponent.BEHAVIOR_TYPE.IDLE, BehaviorComponent.BEHAVIOR_TYPE.SEEK);
@@ -66,7 +67,7 @@ public class BeetleMuncherFactory extends Factory{
         beetleMuncher.addComponent(new FallSpeedComponent(100,0));
         beetleMuncher.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
         beetleMuncher.addComponent(new SpawnComponent(beetleMuncher,
-                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 5000, 6));
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 5000, 6, CoinTypeComponent.COIN_TYPE.COLLECTABLE));
 
         beetleMuncher.addComponent(new HandleCollisionComponent() {
             @Override

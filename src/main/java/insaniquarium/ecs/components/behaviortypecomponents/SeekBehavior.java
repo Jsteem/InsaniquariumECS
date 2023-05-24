@@ -1,7 +1,9 @@
 package insaniquarium.ecs.components.behaviortypecomponents;
 
 import insaniquarium.ecs.Entity;
-import insaniquarium.ecs.SystemManager;
+import insaniquarium.ecs.components.AttackComponent;
+import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
+import insaniquarium.ecs.systems.SystemManager;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.TargetComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
@@ -72,6 +74,23 @@ public class SeekBehavior extends BehaviorTypeComponent {
                 double steeringForceY = perpendicularY * CURVE_FACTOR;
 
 
+                AttackComponent attackComponent = entity.getComponent(AttackComponent.class);
+                if (attackComponent != null && attackComponent.x != -1 && attackComponent.y != -1) {
+                    movementComponent.overWrite = true;
+                    dx = attackComponent.x - movementComponent.x;
+                    dy = attackComponent.y - movementComponent.y;
+                    directionLength = Math.sqrt(dx * dx + dy * dy);
+                    directionX = dx / directionLength;
+                    directionY = dy / directionLength;
+                    steeringForceX = -directionX * 1000;
+                    steeringForceY = -directionY * 1000;
+                    movementComponent.vx += steeringForceX;
+                    movementComponent.vy += steeringForceY;
+
+                    attackComponent.x = -1;
+                    attackComponent.y = -1;
+                }
+
                 finalVelocityX = desiredVelocityX + steeringForceX;
                 finalVelocityY = desiredVelocityY + steeringForceY;
 
@@ -85,7 +104,7 @@ public class SeekBehavior extends BehaviorTypeComponent {
                 finalVelocityY *= 0.99;
             }
 
-            if (movementComponent.vx * finalVelocityX < 0
+            if (movementComponent.overWrite && movementComponent.vx * finalVelocityX < 0
                     && (animationComponent.activeType.type != AnimationComponent.AnimationType.TURN ||
                     animationComponent.activeType.type != AnimationComponent.AnimationType.HUNGRY_TURN)) {
 
@@ -129,8 +148,14 @@ public class SeekBehavior extends BehaviorTypeComponent {
             component.passedTimeMs = 0;
             component.previousBehavior = this;
             if (!component.sick) {
-                component.sick = true;
-                component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
+                AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
+                if(animationComponent != null){
+                    if(animationComponent.types.get(AnimationComponent.AnimationType.HUNGRY_IDLE) != null){
+                        component.sick = true;
+                        component.nextBehavior = component.getBehaviorTypeComponent(BehaviorComponent.BEHAVIOR_TYPE.SEEK);
+                    }
+                }
+
             } else {
                 AnimationComponent animationComponent = entity.getComponent(AnimationComponent.class);
                 if (animationComponent != null) {

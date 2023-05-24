@@ -1,12 +1,11 @@
-package insaniquarium.ecs;
+package insaniquarium.ecs.systems;
 
+import insaniquarium.ecs.Entity;
+import insaniquarium.ecs.EntityManager;
 import insaniquarium.ecs.components.BoundingCollisionComponent;
-import insaniquarium.ecs.components.BoundingRadiusComponent;
 import insaniquarium.ecs.components.MovementComponent;
 import insaniquarium.ecs.components.TargetComponent;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
-import insaniquarium.ecs.systems.RenderSystem;
-import insaniquarium.ecs.systems.System;
 import insaniquarium.utility.CollisionObject;
 import insaniquarium.utility.KDTree;
 

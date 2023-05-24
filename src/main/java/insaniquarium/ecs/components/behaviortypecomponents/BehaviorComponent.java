@@ -1,6 +1,6 @@
 package insaniquarium.ecs.components.behaviortypecomponents;
 
-import insaniquarium.ecs.Component;
+import insaniquarium.ecs.components.Component;
 import insaniquarium.ecs.Entity;
 
 import java.util.HashMap;

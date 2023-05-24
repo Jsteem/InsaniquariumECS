@@ -2,12 +2,12 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
@@ -48,7 +48,7 @@ public class GuppyCruncherFactory extends Factory{
 
         guppyCruncher.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
 
-
+        guppyCruncher.addComponent(new IdleRandomTargetPosition(0,0, false));
         guppyCruncher.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
 
         guppyCruncher.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FishTypeComponent.FISH_TYPE.GUPPY_SMALL.value));

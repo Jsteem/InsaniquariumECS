@@ -3,10 +3,10 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.*;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
@@ -74,7 +74,7 @@ public class GuppyFactory extends Factory {
 
         guppy.addComponent(new FallSpeedComponent(150,0));
 
-        guppy.addComponent(new IdleRandomTargetPosition(0 , 0));
+        guppy.addComponent(new IdleRandomTargetPosition(0 , 0, false));
 
         guppy.addComponent(new HandleCollisionComponent() {
             @Override
@@ -165,7 +165,7 @@ public class GuppyFactory extends Factory {
 
             if (spawnComponent == null) {
                 spawnComponent = new SpawnComponent(guppy,
-                        FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 8000, 0);
+                        FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 8000, 0, CoinTypeComponent.COIN_TYPE.COLLECTABLE);
                 guppy.addComponent(spawnComponent);
             }
             spawnComponent.level = level < 2 ? level : 3;

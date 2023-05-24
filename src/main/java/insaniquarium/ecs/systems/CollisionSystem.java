@@ -2,7 +2,6 @@ package insaniquarium.ecs.systems;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.SystemManager;
 import insaniquarium.ecs.components.*;
 
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
@@ -51,16 +50,13 @@ public class CollisionSystem extends System {
                                 collisionFound = true;
                                 //java.lang.System.out.println("Collision found between entity : " + entity.id + "and target: " + match.entity.id);
 
-                                //handle the collision for the entity itself
                                 HandleCollisionComponent handleCollisionComponent = entity.getComponent(HandleCollisionComponent.class);
                                 if (handleCollisionComponent != null) {
                                     handleCollisionComponent.handleCollision(entity, match.entity, targetComponent.maskEntityTarget);
                                 }
                             }
-
                         }
                     }
-
                 }
                 //delete click entities
                 if (targetComponent != null && (targetComponent.maskEntity & ClickTypeComponent.CLICK_TYPE.CLICK.value) > 0) {

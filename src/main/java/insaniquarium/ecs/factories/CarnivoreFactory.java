@@ -2,10 +2,10 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.*;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
 import insaniquarium.ecs.components.typecomponents.FishTypeComponent;
@@ -58,7 +58,7 @@ public class CarnivoreFactory extends Factory{
         int boundingCircleRadius = 40;
 
         carnivore.addComponent(new MovementComponent(x, y, 0, 0, 0, 0));
-        carnivore.addComponent(new IdleRandomTargetPosition(0,0));
+        carnivore.addComponent(new IdleRandomTargetPosition(0,0, true));
 
         carnivore.addComponent(new BoundingRadiusComponent(boundingCircleRadius));
         carnivore.addComponent(new BoundingCollisionComponent(boundingCircleRadius, boundingCircleRadius));
@@ -95,9 +95,9 @@ public class CarnivoreFactory extends Factory{
         });
 
         SpawnComponent spawnComponent = new SpawnComponent(carnivore,
-                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 7000, 3);
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 7000, 3, FishTypeComponent.FISH_TYPE.GUPPY_SMALL);
         carnivore.addComponent(spawnComponent);
-
+        carnivore.addComponent(new IdleRandomTargetPosition(0,0, false));
         EntityManager.getInstance().addEntity(carnivore);
         return carnivore;
     }

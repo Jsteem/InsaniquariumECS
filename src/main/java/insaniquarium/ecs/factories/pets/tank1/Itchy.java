@@ -1,8 +1,10 @@
-package insaniquarium.ecs.factories;
+package insaniquarium.ecs.factories.pets.tank1;
 
 import insaniquarium.ecs.Entity;
+import insaniquarium.ecs.factories.Factory;
 
-public class AlienFactory extends Factory{
+public class Itchy extends Factory {
+
     @Override
     public Entity createEntity(int x, int y, int level) {
         return null;

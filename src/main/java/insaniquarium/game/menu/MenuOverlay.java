@@ -2,7 +2,7 @@ package insaniquarium.game.menu;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
+import insaniquarium.ecs.factories.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.game.data.GameData;

@@ -1,6 +1,6 @@
 package insaniquarium.ecs.components.typecomponents;
 
-import insaniquarium.ecs.Component;
+import insaniquarium.ecs.components.Component;
 
 public class PetTypeComponent extends Component {
     public enum PET_TYPE{
@@ -9,7 +9,12 @@ public class PetTypeComponent extends Component {
         NIKO(0),
         ITCHY(0),
         PREGO(0),
-        ZORF(0);
+        ZORF(0),
+        VERT(0),
+        CLYDE(0),
+        MERYL(0),
+        WADSWORTH(0),
+        RUFUS(0);
 
         public  final long value;
         PET_TYPE(long value) {

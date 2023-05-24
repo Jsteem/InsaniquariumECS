@@ -1,7 +1,7 @@
 package insaniquarium.managers;
 
 import insaniquarium.Main;
-import insaniquarium.ecs.SystemManager;
+import insaniquarium.ecs.systems.SystemManager;
 import insaniquarium.managers.drawrequest.DrawRequest;
 import javafx.scene.canvas.GraphicsContext;
 

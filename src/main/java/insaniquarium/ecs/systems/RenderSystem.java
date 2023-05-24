@@ -59,6 +59,10 @@ public class RenderSystem extends System {
                         sourceX = movementComponent.x;
                         sourceY = movementComponent.y;
                         reverse = movementComponent.vx >= 0;
+                        if(movementComponent.overWrite){
+                            reverse = !reverse;
+                            movementComponent.overWrite = false;
+                        }
                     }
 
 

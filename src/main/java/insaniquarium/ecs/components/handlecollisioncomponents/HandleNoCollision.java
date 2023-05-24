@@ -1,6 +1,6 @@
 package insaniquarium.ecs.components.handlecollisioncomponents;
 
-import insaniquarium.ecs.Component;
+import insaniquarium.ecs.components.Component;
 import insaniquarium.ecs.Entity;
 
 public abstract class HandleNoCollision extends Component {

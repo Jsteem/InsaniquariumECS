@@ -1,7 +1,7 @@
 package insaniquarium.ecs.components.typecomponents;
 
 
-import insaniquarium.ecs.Component;
+import insaniquarium.ecs.components.Component;
 
 public class FishTypeComponent extends Component {
     public enum FISH_TYPE{

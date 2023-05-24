@@ -1,6 +1,6 @@
 package insaniquarium.ecs.components.typecomponents;
 
-import insaniquarium.ecs.Component;
+import insaniquarium.ecs.components.Component;
 
 public class AlienTypeComponent extends Component {
     public enum ALIEN_TYPE{

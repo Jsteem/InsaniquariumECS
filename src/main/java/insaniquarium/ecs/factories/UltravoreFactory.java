@@ -2,12 +2,11 @@ package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
 import insaniquarium.ecs.EntityManager;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.*;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationComponent;
 import insaniquarium.ecs.components.animationtypecomponents.AnimationTypeComponent;
 import insaniquarium.ecs.components.animationtypecomponents.IdleAnimation;
-import insaniquarium.ecs.components.animationtypecomponents.IdleRandomTargetPosition;
+import insaniquarium.ecs.components.behaviortypecomponents.IdleRandomTargetPosition;
 import insaniquarium.ecs.components.behaviortypecomponents.BehaviorComponent;
 import insaniquarium.ecs.components.handlecollisioncomponents.HandleCollisionComponent;
 import insaniquarium.ecs.components.typecomponents.CoinTypeComponent;
@@ -66,10 +65,10 @@ public class UltravoreFactory extends Factory{
 
         ultravore.addComponent(new TargetComponent(FishTypeComponent.FISH_TYPE.FISH.value, FishTypeComponent.FISH_TYPE.CARNIVORE.value));
         ultravore.addComponent(new FallSpeedComponent(100,0));
-        ultravore.addComponent(new IdleRandomTargetPosition(0,0));
+        ultravore.addComponent(new IdleRandomTargetPosition(0,0, false));
 
         SpawnComponent spawnComponent = new SpawnComponent(ultravore,
-                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 7000, 4);
+                FactoryManager.getInstance().getFactory(CoinTypeComponent.COIN_TYPE.COLLECTABLE), 7000, 4, CoinTypeComponent.COIN_TYPE.COLLECTABLE);
         ultravore.addComponent(spawnComponent);
         ultravore.addComponent(new HandleCollisionComponent() {
             @Override

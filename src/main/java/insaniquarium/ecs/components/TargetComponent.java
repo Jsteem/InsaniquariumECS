@@ -1,7 +1,5 @@
 package insaniquarium.ecs.components;
 
-import insaniquarium.ecs.Component;
-
 public class TargetComponent extends Component {
 
     public long maskEntityTarget;

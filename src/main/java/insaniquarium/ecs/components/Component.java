@@ -1,4 +1,4 @@
-package insaniquarium.ecs;
+package insaniquarium.ecs.components;
 
 public abstract class Component {
 

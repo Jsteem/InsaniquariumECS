@@ -1,7 +1,6 @@
 package insaniquarium.ecs.factories;
 
 import insaniquarium.ecs.Entity;
-import insaniquarium.ecs.FactoryManager;
 import insaniquarium.ecs.components.RenderComponent;
 import insaniquarium.ecs.components.typecomponents.FoodTypeComponent;
 import insaniquarium.utility.ImageInfo;

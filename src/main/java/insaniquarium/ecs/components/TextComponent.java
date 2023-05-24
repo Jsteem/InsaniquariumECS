@@ -1,13 +1,11 @@
 package insaniquarium.ecs.components;
 
-import insaniquarium.ecs.Component;
 import insaniquarium.managers.FontManager;
 import insaniquarium.utility.GameFont;
 import insaniquarium.utility.ImageInfo;
 import javafx.scene.paint.Color;
 
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 

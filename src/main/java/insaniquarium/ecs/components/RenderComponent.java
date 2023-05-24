@@ -1,6 +1,5 @@
 package insaniquarium.ecs.components;
 
-import insaniquarium.ecs.Component;
 import insaniquarium.utility.ImageInfo;
 
 public class RenderComponent extends Component {
