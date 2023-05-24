@@ -95,7 +95,7 @@ public class GameCanvas extends Canvas {
                         movementComponent.x = x;
                         movementComponent.y = y;
                         specialFoodEntities.remove(0);
-                    } else if (gameData.subtractFromTotalAmountOfMoney(5)) {
+                    } else if (gameData.subtractFromTotalAmountOfMoney(gameData.getFoodPrice())) {
                         //foodEntity = FactoryManager.getInstance().getFactory(FoodTypeComponent.FOOD_TYPE.FOOD).createEntity((int) x, (int) y, gameData.getTierFood());
 
                         //DEBUG - spawn a star:

@@ -200,4 +200,8 @@ public class GameData {
     public int getWeaponTier() {
         return laserUpgrade;
     }
+
+    public int getFoodPrice() {
+        return foodPrice;
+    }
 }

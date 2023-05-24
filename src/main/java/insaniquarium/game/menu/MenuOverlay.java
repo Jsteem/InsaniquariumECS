@@ -112,7 +112,7 @@ public class MenuOverlay {
 
         //SLOT0 (variable)
         if (prices[++slotNr] != 0) {
-            displayEntity = FactoryManager.getInstance().getFactory(variableSlots[slotNr])
+            displayEntity = FactoryManager.getInstance().getFactory(variableSlots[0])
                     .createDisplayEntity(DISPLAY_ENTITY_OFFSET_X[slotNr], DISPLAY_ENTITY_OFFSET_Y[slotNr]);
             displayEntities[slotNr] = displayEntity;
         }
