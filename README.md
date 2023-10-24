@@ -18,4 +18,4 @@ With ECS, integrating new features like pets and aliens is seamless and does not
 - Alien: The alien entity attempts to consume fish but can be defeated by the player clicking on it. Fewer clicks are needed when upgrading the weapons.
 
 
-![pets and alien](./animation.gif)
+![pets and alien](./Animation.gif)
